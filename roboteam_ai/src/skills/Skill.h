@@ -23,6 +23,7 @@ class PosVelAngle;
  */
 class Skill : public bt::Leaf {
 private:
+        int tick = 0;
     roboteam_msgs::RobotCommand rotateRobotCommand(roboteam_msgs::RobotCommand &cmd);
 protected:
     io::IOManager ioManager = io::IOManager(false, true);

@@ -5,7 +5,6 @@
 #include "ApplicationManager.h"
 #include "world/WorldManager.h"
 
-
 namespace ui = rtt::ai::interface;
 std::shared_ptr<ui::MainWindow> window;
 
@@ -43,6 +42,7 @@ void setDarkTheme() {
 }
 
 int main(int argc, char* argv[]) {
+
     // Init ROS node in main thread
     ros::init(argc, argv, "Roboteam_AI");
     rtt::ai::Constants::init();
@@ -53,6 +53,7 @@ int main(int argc, char* argv[]) {
     // initialize the interface
     QApplication a(argc, argv);
     setDarkTheme();
+
 
     window = std::make_shared<ui::MainWindow>();
     window->show();

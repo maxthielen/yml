@@ -84,7 +84,7 @@ const roboteam_msgs::World World::makeWorldMsg() {
 
 bool World::weHaveRobots() {
     std::lock_guard<std::mutex> lock(worldMutex);
-    return worldDataPtr && ! worldDataPtr->us.empty();
+    return worldDataPtr && (! worldDataPtr->us.empty() || ! worldDataPtr->them.empty()) ;
 }
 
 void World::setWorldData(WorldDataPtr &setWorldDataPtr) {

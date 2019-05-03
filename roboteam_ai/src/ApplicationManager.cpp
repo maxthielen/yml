@@ -1,6 +1,7 @@
 //
 // Created by mrlukasbos on 14-1-19.
 //
+#include <roboteam_ai/src/skills/gotopos/SkillGoToPos.h>
 
 #include <roboteam_ai/src/demo/JoystickDemo.h>
 #include <roboteam_ai/src/coach/defence/DefenceDealer.h>
@@ -61,6 +62,14 @@ void ApplicationManager::loop() {
 }
 
 void ApplicationManager::runOneLoopCycle() {
+//    std::string name = "a";
+//
+//    std::shared_ptr<bt::Blackboard> BB = std::make_shared<bt::Blackboard>();
+//
+//    std::shared_ptr<rtt::ai::SkillGoToPos> gtp = std::make_shared<rtt::ai::SkillGoToPos>(name, BB);
+//    gtp->gtpUpdate();
+//
+//    return;
     if (ai::world::world->weHaveRobots()) {
         if (BTFactory::getCurrentTree() == "NaN") {
             ROS_INFO("NaN tree probably Halting");

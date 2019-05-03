@@ -24,6 +24,9 @@ void SkillGoToPos::gtpInitialize() {
 /// Called when the Skill is Updated
 SkillGoToPos::Status SkillGoToPos::gtpUpdate() {
 
+    publishRobotCommand();
+    return Status::Success;
+
     if (goToBall) targetPos = ball->pos;
 
     // Now check the progress we made

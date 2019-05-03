@@ -1,4 +1,5 @@
 #include <roboteam_ai/src/control/ControlUtils.h>
+#include <roboteam_ai/src/interface/InterfaceValues.h>
 #include "Skill.h"
 #include "../utilities/RobotDealer.h"
 
@@ -15,9 +16,29 @@ Skill::Skill(std::string name, bt::Blackboard::Ptr blackboard)
 void Skill::publishRobotCommand() {
     Vector2 vel = Vector2(command.x_vel, command.y_vel);
     vel = control::ControlUtils::velocityLimiter(vel, 1.0, 0.0);
-    command.x_vel = vel.x;
-    command.y_vel = vel.y;
+    static int counter=0;
+    command.id = 2;
+    if (counter++ < 2000) {
+        command.x_vel = 0;
+        command.w=0;
+    }
+    else{
 
+        if (counter==4000){counter=0; command.x_vel=0;}
+        if (counter>3000) {
+            command.x_vel=-1;
+            command.w=0;
+        }
+        else {
+            command.w=control::ControlUtils::constrainAngle(counter/300.0*M_PI);
+            std::cout<<command.w<<std::endl;
+            command.x_vel = 1;
+        }
+    }
+
+
+    command.y_vel = 0;
+    command.use_angle = 1;
     ros::NodeHandle nh;
     std::string ourSideParam;
     nh.getParam("our_side", ourSideParam);
