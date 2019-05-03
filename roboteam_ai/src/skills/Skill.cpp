@@ -13,6 +13,11 @@ Skill::Skill(std::string name, bt::Blackboard::Ptr blackboard)
 
 }
 void Skill::publishRobotCommand() {
+    Vector2 vel = Vector2(command.x_vel, command.y_vel);
+    vel = control::ControlUtils::velocityLimiter(vel, 1.0, 0.0);
+    command.x_vel = vel.x;
+    command.y_vel = vel.y;
+
     ros::NodeHandle nh;
     std::string ourSideParam;
     nh.getParam("our_side", ourSideParam);
@@ -31,6 +36,7 @@ void Skill::publishRobotCommand() {
         ioManager.publishRobotCommand(command); // We default to our robots being on the left if parameter is not set
 
     }
+
     // refresh the robotcommand after it has been sent
     refreshRobotCommand();
 }
