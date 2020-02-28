@@ -5,6 +5,7 @@
 #include "control/positionControl/PositionControl.h"
 #include "control/positionControl/PositionControlUtils.h"
 #include "control/positionControl/pathTracking/NumTreesTracking.h"
+#include "control/positionControl/pathTracking/PurePursuit.h"
 #include "interface/api/Input.h"
 
 namespace rtt::ai::control {
@@ -20,6 +21,9 @@ RobotCommand PositionControl::computeAndTrackPath(const world::Field &field, int
 
     interface::Input::drawData(interface::Visual::PATHFINDING, computedPaths[robotId], Qt::green, robotId, interface::Drawing::LINES_CONNECTED);
     interface::Input::drawData(interface::Visual::PATHFINDING, computedPaths[robotId], Qt::blue, robotId, interface::Drawing::DOTS);
+
+    Vector2 pursuitPoint = PurePursuit::getPursuingPoint(computedPaths[robotId], currentPosition, 0.2);
+    interface::Input::drawData(interface::Visual::PATHFINDING, {currentPosition, pursuitPoint}, Qt::red, robotId, interface::Drawing::LINES_CONNECTED);
 
     RobotCommand command = RobotCommand();
     command.pos = computedPaths[robotId].front();
