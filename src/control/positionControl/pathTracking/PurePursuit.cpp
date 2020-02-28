@@ -6,6 +6,7 @@
 
 #include <algorithm>
 #include "roboteam_utils/LineSegment.h"
+#include <cmath>
 
 namespace rtt::ai::control {
 
@@ -18,10 +19,28 @@ namespace rtt::ai::control {
         /* First, find the segment to which the position is the closest */
         int iNodeClosest = getClosestPathSegment(path, position);
 
+
+        /** Note : The following is needed because, in the current implementation of numtrees,
+         * the path segment that is currently being driven is not included in the path.
+         */
+        /* Subtract the distance to the start of the closest segment from the pursuit distance */
+        pursuitDistance -= (position - path.at(iNodeClosest)).length();
+        /* Make sure that the pursuit distance is not negative */
+        pursuitDistance = std::max(0., pursuitDistance);
+
         /* Get the line segment on which the pursuit point has to be found */
         Vector2 segmentStart = path.at(iNodeClosest);
         Vector2 segmentStop  = path.at(iNodeClosest+1);
         LineSegment segment(segmentStart, segmentStop);
+
+        /** Note : the following is needed because, in the current implementation of numtrees,
+         * path segments are given with a length 0. (startSegment == stopSegment)
+         */
+        /* If the closest line segment has no length, all further calculations are invalid. For example, segment.project will return NaN.
+         * Simply return the start of the segment.
+         */
+        if(segment.length() == 0)
+            return segmentStart;
 
         /* Project the current location onto the segment */
         Vector2 positionOnSegment = segment.project(position);
@@ -36,7 +55,7 @@ namespace rtt::ai::control {
         double remainingDistance = (segmentStop - positionOnSegment).length();
         if(remainingDistance < pursuitDistance){
             // If there is no next segment, return the stop position of the current segment
-            if(iNodeClosest == path.size() - 1)
+            if(iNodeClosest == path.size() - 2)
                 return segmentStop;
 
             /* Set the next segment */
@@ -58,12 +77,24 @@ namespace rtt::ai::control {
     }
 
     int PurePursuit::getClosestPathSegment(const std::vector<Vector2> &path, const rtt::Vector2 &position){
+
+        if(path.size() < 2){
+            std::cerr << "[PurePursuit::getClosestPathSegment] Trying to get a pursuit point for a path without segments!" << std::endl;
+            return 0;
+        }
+
         double closestDistance = 1e9;
-        int iNodeClosest = -1;
+        // Assume that the first node is closest. Ensures a valid return value
+        int iNodeClosest = 0;
+
         // For each segment in the path
         for(int iNode = 0; iNode < path.size() - 1; iNode++) {
             // Get the segment from the path
             LineSegment segment(path.at(iNode), path.at(iNode + 1));
+            // Segments with zero distance are invalid. segment.distanceToLine will return -nan. Skip the invalid segment
+            if(segment.length() == 0.0)
+                continue;
+
             // Calculate the shortest distance between this segment and the given position
             double distance = segment.distanceToLine(position);
             // If this segment is currently the closest segment to the position, store it
@@ -75,5 +106,4 @@ namespace rtt::ai::control {
 
         return iNodeClosest;
     }
-
 }

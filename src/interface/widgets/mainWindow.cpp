@@ -114,7 +114,7 @@ MainWindow::MainWindow(const rtt::world_new::World &worldManager, QWidget *paren
     // update mainwindow and field visualization
     auto *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(update()));
-    timer->start(200);  // 5fps
+    timer->start(40);  // 5fps
 
     connect(mainControlsWidget, SIGNAL(treeHasChanged()), treeWidget, SLOT(invalidateTree()));
     connect(mainControlsWidget, SIGNAL(treeHasChanged()), keeperTreeWidget, SLOT(invalidateTree()));

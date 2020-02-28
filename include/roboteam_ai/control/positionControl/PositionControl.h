@@ -42,20 +42,21 @@ class PositionControl {
 
     /**
      * Updates the robot view vector
-     * @param robots the RobotView vector of robots
+     * @param robotPositions the RobotView vector of robots
      */
-    void setRobotVector(const std::vector<world_new::view::RobotView> &robots);
+    void setRobotPositions(std::vector<Vector2> &robotPositions);
 
     /**
      * The computed path should be recalculated if: <br>
      * - it is empty (no path yet) <br>
      * - the target position changed with at least MAX_TARGET_DEVIATION <br>
-     * - the robot will collide with another one by the next path point
+     * - the robot will collide with another one by the next path point (ignored if the robot is not moving)
      * @param targetPos final target position
      * @param robotId the ID of the current robot
      * @return true if one of the above conditions are true, false otherwise
      */
-    bool shouldRecalculatePath(const Vector2 &currentPosition, const Vector2 &targetPos, int robotId);
+    bool shouldRecalculatePath(const Vector2 &currentPosition, const Vector2 &targetPos,
+                               const Vector2 &currentVelocity, int robotId);
 };
 
 }  // namespace rtt::ai::control

@@ -9,21 +9,22 @@
 #include "interface/api/Input.h"
 
 namespace rtt::ai::control {
-
-// TODO: add projection to outside defence area (project target position)(is this really needed?)
 RobotCommand PositionControl::computeAndTrackPath(const world::Field &field, int robotId, const Vector2 &currentPosition, const Vector2 &currentVelocity,
                                                   const Vector2 &targetPosition) {
-    // TODO: this is a workaround caused by the fact that the field is not global
     collisionDetector.setField(field);
-    if (shouldRecalculatePath(currentPosition, targetPosition, robotId)) {
+    if (shouldRecalculatePath(currentPosition, targetPosition, currentVelocity, robotId)) {
         computedPaths[robotId] = pathPlanningAlgorithm.computePath(currentPosition, targetPosition);
     }
 
     interface::Input::drawData(interface::Visual::PATHFINDING, computedPaths[robotId], Qt::green, robotId, interface::Drawing::LINES_CONNECTED);
     interface::Input::drawData(interface::Visual::PATHFINDING, computedPaths[robotId], Qt::blue, robotId, interface::Drawing::DOTS);
 
-    Vector2 pursuitPoint = PurePursuit::getPursuingPoint(computedPaths[robotId], currentPosition, 0.2);
-    interface::Input::drawData(interface::Visual::PATHFINDING, {currentPosition, pursuitPoint}, Qt::red, robotId, interface::Drawing::LINES_CONNECTED);
+    Vector2 pursuitPoint = computedPaths[robotId].front();
+    if(2 <= computedPaths[robotId].size()) {
+        pursuitPoint = PurePursuit::getPursuingPoint(computedPaths[robotId], currentPosition, 0.4);
+        interface::Input::drawData(interface::Visual::PATHFINDING, {currentPosition, pursuitPoint}, Qt::red, robotId,interface::Drawing::LINES_CONNECTED);
+        computedPaths[robotId].front() = pursuitPoint;
+    }
 
     RobotCommand command = RobotCommand();
     command.pos = computedPaths[robotId].front();
@@ -34,10 +35,12 @@ RobotCommand PositionControl::computeAndTrackPath(const world::Field &field, int
     return command;
 }
 
-bool PositionControl::shouldRecalculatePath(const Vector2 &currentPosition, const Vector2 &targetPos, int robotId) {
+bool PositionControl::shouldRecalculatePath(const Vector2 &currentPosition, const Vector2 &targetPos,
+                                            const Vector2 &currentVelocity, int robotId) {
     return computedPaths[robotId].empty() || PositionControlUtils::isTargetChanged(targetPos, computedPaths[robotId].back()) ||
-           collisionDetector.isRobotCollisionBetweenPoints(currentPosition, computedPaths[robotId].front());
+            (currentVelocity != Vector2() && collisionDetector.getRobotCollisionBetweenPoints(currentPosition, computedPaths[robotId].front()));
 }
 
-void PositionControl::setRobotVector(const std::vector<world_new::view::RobotView> &robots) { collisionDetector.setRobotVector(robots); }
+void PositionControl::setRobotPositions(std::vector<Vector2> &robotPositions) {
+    collisionDetector.setRobotPositions(robotPositions); }
 }  // namespace rtt::ai::control

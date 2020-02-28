@@ -17,9 +17,9 @@ namespace rtt::ai::control {
  */
 class CollisionDetector {
    private:
-    const double DEFAULT_ROBOT_COLLISION_RADIUS = 3.0 * Constants::ROBOT_RADIUS();
+    const double DEFAULT_ROBOT_COLLISION_RADIUS = 2.0 * Constants::ROBOT_RADIUS();
 
-    const std::vector<world_new::view::RobotView>* robots = nullptr;
+    std::vector<Vector2> robotPositions;
     const world::Field* field = nullptr;
 
    public:
@@ -39,7 +39,7 @@ class CollisionDetector {
      * @param currentRobotPosition the current robot position (should be ignored when checking)
      * @return
      */
-    bool isRobotCollisionBetweenPoints(const Vector2& initialPoint, const Vector2& nextPoint);
+    std::optional<Vector2> getRobotCollisionBetweenPoints(const Vector2& initialPoint, const Vector2& nextPoint);
 
     /**
      * Check if the point is inside the field
@@ -59,7 +59,7 @@ class CollisionDetector {
 
     void setField(const world::Field& field);
 
-    void setRobotVector(const std::vector<world_new::view::RobotView>& robots);
+    void setRobotPositions(std::vector<Vector2> &robotPositions);
 };
 
 }  // namespace rtt::ai::control

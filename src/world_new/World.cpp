@@ -68,6 +68,10 @@ std::optional<view::WorldDataView> World::getHistoryWorld(size_t ticksAgo) const
 void World::updateWorld(proto::World &protoWorld) {
     WorldData data{protoWorld, *settings, updateMap};
     setWorld(data);
+
+    std::vector<Vector2> robotPositions(getWorld()->getRobotsNonOwning().size());
+    std::transform(getWorld()->getRobotsNonOwning().begin(), getWorld()->getRobotsNonOwning().end(), robotPositions.begin(), [](const auto& robot) -> Vector2 { return (robot->getPos()); });
+    positionControl.setRobotPositions(robotPositions);
 }
 
 void World::updateField(proto::SSL_GeometryFieldSize &protoField) {
@@ -101,7 +105,6 @@ uint64_t World::getTimeDifference() const noexcept { return tickDuration; }
 robot::RobotControllers &World::getControllersForRobot(uint8_t id) noexcept { return robotControllers[id]; }
 
 ai::control::PositionControl *World::getRobotPositionController() noexcept {
-    positionControl.setRobotVector(getWorld()->getRobotsNonOwning());
     return &positionControl;
 }
 
