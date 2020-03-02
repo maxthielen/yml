@@ -18,7 +18,7 @@ namespace rtt::ai::control {
  * Path tracking algorithm. See method computePath for details.
  */
 class PidTracking {
-   private:
+    public:
     static constexpr double MAX_VELOCITY = Constants::MAX_VEL();
 
     // the PID controllers on the two axes

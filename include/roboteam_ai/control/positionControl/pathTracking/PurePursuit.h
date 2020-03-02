@@ -12,7 +12,7 @@
 namespace rtt::ai::control {
 class PurePursuit {
    public:
-    /**
+    /** TODO update
      * @brief Given a path, a position, and a pursuit distance, it returns the point to which should be driven
      * This point is called the Pure Pursuit Point
      * @param path The path on which to find the Pure Pursuit Point
@@ -20,7 +20,7 @@ class PurePursuit {
      * @param pursuitDistance The distance to look ahead
      * @return The Pure Pursuit Point. The point to which should be driven
      */
-    static Vector2 getPursuingPoint(const std::vector<Vector2>& path, const Vector2& position, double pursuitDistance);
+    static std::pair<Vector2, int> getPursuingPoint(const std::vector<Vector2>& path, const Vector2& position, double pursuitDistance, bool forceFirstSegment, int robotId);
 
     /**
      * @brief Given a path and a position, find the index of the path segment that is closest to the position

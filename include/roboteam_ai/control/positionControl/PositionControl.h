@@ -24,9 +24,9 @@ class PositionControl {
     NumTreesPlanning pathPlanningAlgorithm = NumTreesPlanning(collisionDetector);
     NumTreesTracking pathTrackingAlgorithm;
 
-    std::unordered_map<int, std::vector<Vector2>> computedPaths;
-
    public:
+
+    std::unordered_map<int, std::vector<Vector2>> computedPaths;
     /**
      * Generates a path according to the selected planning algorithm,
      * and tracks it using the selected tracking algorithm. In the case a collision

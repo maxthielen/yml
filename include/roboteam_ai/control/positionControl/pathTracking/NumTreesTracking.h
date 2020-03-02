@@ -20,9 +20,9 @@ class NumTreesTracking {
    private:
     static constexpr unsigned long STEPS_AHEAD = 1;
 
-    PidTracking pidTracking;
-
    public:
+
+    PidTracking pidTracking;
     /**
      * Generates an output velocity and angle according to the implemented algorithm.
      * After reaching a certain distance to the closest path point, it will go to the next one. <br><br>
