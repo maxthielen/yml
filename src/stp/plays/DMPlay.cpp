@@ -78,7 +78,7 @@ void DMPlay::calculateInfoForKeeper() noexcept {
 
 void DMPlay::calculateInfoForShooter() noexcept {
     stpInfos["shooter"].setShotType(ShotType::MAX);
-    stpInfos["shooter"].setPositionToShootAt(field.getTheirGoalCenter() + Vector2{1.0, 0.5});
+    stpInfos["shooter"].setPositionToShootAt(field.getTheirGoalCenter());
 }
 
 bool DMPlay::shouldRoleSkipEndTactic() { return false; }

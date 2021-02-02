@@ -6,6 +6,7 @@
 
 #include "stp/skills/GoToPos.h"
 #include "stp/skills/Rotate.h"
+#include <roboteam_utils/LineSegment.h>
 
 namespace rtt::ai::stp::tactic {
 GetBallInDirection::GetBallInDirection() { skills = collections::state_machine<Skill, Status, StpInfo>{skill::GoToPos(), skill::Rotate(), skill::GoToPos()}; }
@@ -23,9 +24,20 @@ std::optional<StpInfo> GetBallInDirection::calculateInfoForSkill(StpInfo const &
     double ballDistance = (ballPosition - robotPosition).length();
     Vector2 newRobotPosition;
 
+    auto skillsNum = skills.total_count();
+
     if (skills.current_num() == 0) {
         // First GoToPos: Go behind ball
-        newRobotPosition = ballPosition + (ballPosition - targetPosition).stretchToLength(control_constants::TURN_ON_DRIBBLER_DISTANCE);
+        newRobotPosition = ballPosition + (ballPosition - targetPosition).stretchToLength(
+                control_constants::TURN_ON_DRIBBLER_DISTANCE);
+
+        auto pathToBehindBall = LineSegment(robotPosition, newRobotPosition);
+        auto distFromPathToBall = pathToBehindBall.distanceToLine(ballPosition);
+
+        auto drivingDirection = robotPosition - newRobotPosition;
+        if(distFromPathToBall < control_constants::ROBOT_RADIUS * 1.2) {
+            newRobotPosition = ballPosition + Vector2(drivingDirection.y, -drivingDirection.x).stretchToLength(-control_constants::ROBOT_RADIUS * 2);
+        }
     } else {
         // Second GoToPos: Go towards ball
         newRobotPosition = robotPosition + (ballPosition - robotPosition).stretchToLength(ballDistance);
