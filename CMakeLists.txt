@@ -73,6 +73,7 @@ set(TACTICS_SOURCES
         ${PROJECT_SOURCE_DIR}/src/stp/tactics/GetBall.cpp
         ${PROJECT_SOURCE_DIR}/src/stp/tactics/BlockRobot.cpp
         ${PROJECT_SOURCE_DIR}/src/stp/tactics/Receive.cpp
+        ${PROJECT_SOURCE_DIR}/src/stp/tactics/DMGoThrough.cpp
         ${PROJECT_SOURCE_DIR}/src/stp/tactics/ChipAtPos.cpp
         ${PROJECT_SOURCE_DIR}/src/stp/tactics/ShootAtPos.cpp
         ${PROJECT_SOURCE_DIR}/src/stp/tactics/Intercept.cpp
@@ -95,6 +96,7 @@ set(ROLES_SOURCES
         ${PROJECT_SOURCE_DIR}/src/stp/roles/Passer.cpp
         ${PROJECT_SOURCE_DIR}/src/stp/roles/Defender.cpp
         ${PROJECT_SOURCE_DIR}/src/stp/roles/Halt.cpp
+        ${PROJECT_SOURCE_DIR}/src/stp/roles/DMGhosting.cpp
         ${PROJECT_SOURCE_DIR}/src/stp/roles/Formation.cpp
         ${PROJECT_SOURCE_DIR}/src/stp/roles/Harasser.cpp
         ${PROJECT_SOURCE_DIR}/src/stp/roles/Keeper.cpp
@@ -117,6 +119,7 @@ set(PLAYS_SOURCES
         ${PROJECT_SOURCE_DIR}/src/stp/plays/DefendPass.cpp
         ${PROJECT_SOURCE_DIR}/src/stp/plays/DefensiveStopFormation.cpp
         ${PROJECT_SOURCE_DIR}/src/stp/plays/AggressiveStopFormation.cpp
+        ${PROJECT_SOURCE_DIR}/src/stp/plays/DMPlay.cpp
         ${PROJECT_SOURCE_DIR}/src/stp/plays/BallPlacementUs.cpp
         ${PROJECT_SOURCE_DIR}/src/stp/plays/BallPlacementThem.cpp
         ${PROJECT_SOURCE_DIR}/src/stp/plays/TimeOut.cpp
