@@ -44,7 +44,7 @@ Status GoToPos::onUpdate(const StpInfo &info) noexcept {
     publishRobotCommand(info.getCurrentWorld());
 
     // Check if successful
-    if ((info.getRobot().value()->getPos() - targetPos).length() <= stp::control_constants::GO_TO_POS_ERROR_MARGIN) {
+    if ((info.getRobot().value()->getPos() - targetPos).length() <= stp::control_constants::GO_TO_POS_ERROR_MARGIN + info.getExtraMargin().value_or(0)) {
         return Status::Success;
     } else {
         return Status::Running;

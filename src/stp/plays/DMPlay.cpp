@@ -22,7 +22,7 @@ DMPlay::DMPlay() : Play() {
     startPlayInvariants.emplace_back(std::make_unique<invariant::BallIsFreeInvariant>());
 
     roles = std::array<std::unique_ptr<Role>, stp::control_constants::MAX_ROBOT_COUNT>{
-        std::make_unique<role::Keeper>(role::Keeper("keeper")),          std::make_unique<role::DMGhosting>(role::DMGhosting("defender_1")),
+        std::make_unique<role::DMGhosting>(role::DMGhosting("notkeeper")),          std::make_unique<role::DMGhosting>(role::DMGhosting("defender_1")),
         std::make_unique<role::DMGhosting>(role::DMGhosting("defender_2")),  std::make_unique<role::DMGhosting>(role::DMGhosting("defender_3")),
         std::make_unique<role::DMGhosting>(role::DMGhosting("defender_4")),   std::make_unique<role::DMGhosting>(role::DMGhosting("defender_5")),
         std::make_unique<role::DMGhosting>(role::DMGhosting("defender_6")),   std::make_unique<role::DMGhosting>(role::DMGhosting("defender_7")),
@@ -39,7 +39,7 @@ Dealer::FlagMap DMPlay::decideRoleFlags() const noexcept {
     Dealer::DealerFlag GoForIt(DealerFlagTitle::NOT_IMPORTANT, DealerFlagPriority::HIGH_PRIORITY);
     Dealer::DealerFlag notImportant(DealerFlagTitle::NOT_IMPORTANT, DealerFlagPriority::LOW_PRIORITY);
 
-    flagMap.insert({"keeper", {keeperFlag}});
+    flagMap.insert({"notkeeper", {keeperFlag}});
     flagMap.insert({"defender_1", {GoForIt}});
     flagMap.insert({"defender_2", {GoForIt}});
     flagMap.insert({"defender_3", {GoForIt}});
@@ -57,7 +57,7 @@ Dealer::FlagMap DMPlay::decideRoleFlags() const noexcept {
 void DMPlay::calculateInfoForRoles() noexcept {
     calculateInfoForShooter();
     calculateInfoForDefenders();
-    calculateInfoForKeeper();
+    //calculateInfoForKeeper();
 }
 
 void DMPlay::calculateInfoForDefenders() noexcept {
@@ -78,7 +78,7 @@ void DMPlay::calculateInfoForKeeper() noexcept {
 
 void DMPlay::calculateInfoForShooter() noexcept {
     stpInfos["shooter"].setShotType(ShotType::MAX);
-    stpInfos["shooter"].setPositionToShootAt(field.getTheirGoalCenter() + Vector2{1.0, 0.5});
+    stpInfos["shooter"].setPositionToShootAt(field.getTheirGoalCenter());
 }
 
 bool DMPlay::shouldRoleSkipEndTactic() { return false; }

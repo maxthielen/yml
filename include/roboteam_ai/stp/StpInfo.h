@@ -82,6 +82,9 @@ struct StpInfo {
     const std::optional<PIDType>& getPidType() const { return PidType; }
     void setPidType(const std::optional<PIDType>& pidType) { PidType = pidType; }
 
+    const std::optional<double>& getExtraMargin() const {return extraMargin; }
+    void setExtraMargin(const std::optional<double>& extraMargin) { this->extraMargin = extraMargin; }
+
    private:
     /**
      * Current world pointer
@@ -158,6 +161,11 @@ struct StpInfo {
      * Enum for deciding which PID should be chosen
      */
     std::optional<PIDType> PidType{PIDType::DEFAULT};
+
+    /**
+     * Possible extra margin
+     */
+    std::optional<double> extraMargin;
 };
 
 /**
