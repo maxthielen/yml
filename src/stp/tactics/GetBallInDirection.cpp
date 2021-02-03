@@ -53,10 +53,10 @@ std::optional<StpInfo> GetBallInDirection::calculateInfoForSkill(StpInfo const &
 
     } else {
         // Second GoToPos: Go towards ball
-        newRobotPosition = robotPosition + (ballPosition - robotPosition).stretchToLength(ballDistance);
+        newRobotPosition = ballPosition + (ballPosition - targetPosition).stretchToLength(control_constants::BALL_RADIUS);
 
         // Rotate towards ball
-        skillStpInfo.setAngle((ballPosition - robotPosition).angle());
+        skillStpInfo.setAngle((ballPosition - newRobotPosition).angle());
     }
 
     // Turn on dribbler when close to ball
