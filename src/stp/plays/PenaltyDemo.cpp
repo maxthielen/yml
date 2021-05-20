@@ -14,17 +14,18 @@ namespace rtt::ai::stp::play {
 
         keepPlayInvariants.clear();
 
-        roles = std::array<std::unique_ptr<Role>, stp::control_constants::MAX_ROBOT_COUNT>{std::make_unique<role::DemoKeeper>(role::DemoKeeper("keeper")),
-                                                                                           std::make_unique<role::Halt>(role::Halt("halt_0")),
-                                                                                           std::make_unique<role::Halt>(role::Halt("halt_1")),
-                                                                                           std::make_unique<role::Halt>(role::Halt("halt_2")),
-                                                                                           std::make_unique<role::Halt>(role::Halt("halt_3")),
-                                                                                           std::make_unique<role::Halt>(role::Halt("halt_4")),
-                                                                                           std::make_unique<role::Halt>(role::Halt("halt_5")),
-                                                                                           std::make_unique<role::Halt>(role::Halt("halt_6")),
-                                                                                           std::make_unique<role::Halt>(role::Halt("halt_7")),
-                                                                                           std::make_unique<role::Halt>(role::Halt("halt_8")),
-                                                                                           std::make_unique<role::Halt>(role::Halt("halt_9"))};
+        roles = std::array<std::unique_ptr<Role>, stp::control_constants::MAX_ROBOT_COUNT>{
+            std::make_unique<role::DemoKeeper>(role::DemoKeeper("demokeeper")),
+            std::make_unique<role::Halt>(role::Halt("halt_0")),
+            std::make_unique<role::Halt>(role::Halt("halt_1")),
+            std::make_unique<role::Halt>(role::Halt("halt_2")),
+            std::make_unique<role::Halt>(role::Halt("halt_3")),
+            std::make_unique<role::Halt>(role::Halt("halt_4")),
+            std::make_unique<role::Halt>(role::Halt("halt_5")),
+            std::make_unique<role::Halt>(role::Halt("halt_6")),
+            std::make_unique<role::Halt>(role::Halt("halt_7")),
+            std::make_unique<role::Halt>(role::Halt("halt_8")),
+            std::make_unique<role::Halt>(role::Halt("halt_9"))};
     }
 
     uint8_t PenaltyDemo::score(world::World *world) noexcept { return 0; }
@@ -34,7 +35,7 @@ namespace rtt::ai::stp::play {
         Dealer::DealerFlag keeperFlag(DealerFlagTitle::KEEPER, DealerFlagPriority::KEEPER);
         Dealer::DealerFlag notImportant(DealerFlagTitle::NOT_IMPORTANT, DealerFlagPriority::LOW_PRIORITY);
 
-        flagMap.insert({"keeper", {keeperFlag}});
+        flagMap.insert({"demokeeper", {keeperFlag}});
         flagMap.insert({"halt_0", {notImportant}});
         flagMap.insert({"halt_1", {notImportant}});
         flagMap.insert({"halt_2", {notImportant}});
@@ -50,12 +51,12 @@ namespace rtt::ai::stp::play {
     }
 
     void PenaltyDemo::calculateInfoForRoles() noexcept {
-        stpInfos["keeper"].setPositionToMoveTo(field.getOurGoalCenter());
-        stpInfos["keeper"].setEnemyRobot(world->getWorld()->getRobotClosestToBall(world::them));
+        stpInfos["demokeeper"].setPositionToMoveTo(field.getOurGoalCenter());
+        stpInfos["demokeeper"].setEnemyRobot(world->getWorld()->getRobotClosestToBall(world::them));
     }
 
     bool PenaltyDemo::shouldRoleSkipEndTactic() { return false; }
 
-    const char *PenaltyDemo::getName() { return "Penalty Demo"; }
+    const char *PenaltyDemo::getName() { return "PenaltyDemo"; }
 
 }  // namespace rtt::ai::stp::play

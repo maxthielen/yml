@@ -54,7 +54,7 @@ std::pair<Vector2, stp::PIDType> KeeperBlockBall::calculateTargetPosition(const 
         auto keeperArc = Arc(field.getOurGoalCenter(), DISTANCE_FROM_GOAL_FAR, -M_PI / 2, M_PI / 2);
 
         // Ball is moving
-        // Intercept ball when it is moving trobotTacticsowards the goal
+        // Intercept ball when it is moving towards the goal
         if (ball->getVelocity().length() > control_constants::BALL_STILL_VEL) {
             auto start = ball->getPos();
             auto end = start + ball->getVelocity().stretchToLength(field.getFieldLength() * 0.5);
