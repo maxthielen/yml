@@ -13,7 +13,7 @@ namespace rtt::ai::stp::role {
 
     DemoKeeper::DemoKeeper(std::string name) : Role(std::move(name)) {
         // create state machine and initializes the first state
-        robotTactics = collections::state_machine<Tactic, Status, StpInfo>{tactic::KeeperBlockBall()};
+        robotTactics = collections::state_machine<Tactic, Status, StpInfo>{tactic::Formation(), tactic::KeeperBlockBall()};
     }
 
     Status DemoKeeper::update(StpInfo const& info) noexcept {
@@ -23,18 +23,13 @@ namespace rtt::ai::stp::role {
             return Status::Failure;
         }
 
-//        if (info.getBall().value()->getVelocity().length() > control_constants::BALL_IS_MOVING_SLOW_LIMIT) {
-//            forceNextTactic();
-//        }
-//
-//        if (info.getBall().value()->getVelocity().length() < control_constants::BALL_IS_MOVING_SLOW_LIMIT) {
-//            robotTactics.reset();
-//        }
+        if (info.getBall().value()->getVelocity().length() > control_constants::BALL_IS_MOVING_SLOW_LIMIT) {
+            forceNextTactic();
+        }
 
-        // Stop blocking when ball is in defense area and still, start getting the ball and pass
-        bool stopBlockBall = isBallInOurDefenseAreaAndStill(info.getField().value(), info.getBall().value()->getPos(), info.getBall().value()->getVelocity());
-        if (stopBlockBall && robotTactics.current_num() == 0) forceNextTactic();
-
+        if (info.getBall().value()->getVelocity().length() < control_constants::BALL_IS_MOVING_SLOW_LIMIT) {
+            robotTactics.reset();
+        }
 
         currentRobot = info.getRobot();
         // Update the current tactic with the new tacticInfo
@@ -69,12 +64,5 @@ namespace rtt::ai::stp::role {
         // Return running by default
         return Status::Running;
     }
-
-    bool DemoKeeper::isBallInOurDefenseAreaAndStill(const world::Field& field, const Vector2& ballPos, const Vector2& ballVel) noexcept {
-    bool pointIsInDefenseArea = FieldComputations::pointIsInDefenseArea(field, ballPos, true);
-    bool ballIsLayingStill = ballVel.length() < control_constants::BALL_IS_MOVING_SLOW_LIMIT;
-
-    return pointIsInDefenseArea && ballIsLayingStill;
-}
 
 }  // namespace rtt::ai::stp::role

@@ -24,16 +24,6 @@ namespace rtt::ai::stp::role {
          * @return The status that the current tactic returns
          */
         [[nodiscard]] Status update(StpInfo const& info) noexcept override;
-
-       private:
-        /**
-     * Checks if ball is in our defense area and still
-     * @param field Field
-     * @param ballPos Ball position
-     * @param ballVel Ball velocity
-     * @return True if ball is in our defense area and still
-     */
-        [[nodiscard]] static bool isBallInOurDefenseAreaAndStill(const world::Field& field, const Vector2& ballPos, const Vector2& ballVel) noexcept;
     };
 }  // namespace rtt::ai::stp::role
 
