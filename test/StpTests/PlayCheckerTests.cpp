@@ -40,6 +40,8 @@ class AlwaysValid : public rtt::ai::stp::Play {
     bool shouldRoleSkipEndTactic() { return false; }
 
     const char *getName() override { return "Always Valid Play"; }
+
+    virtual void calculateInfoForScoredRoles(world::World* world) {}
 };
 
 class AlwaysFalse : public rtt::ai::stp::Play {
@@ -56,10 +58,14 @@ class AlwaysFalse : public rtt::ai::stp::Play {
     bool shouldRoleSkipEndTactic() { return false; }
 
     const char *getName() override { return "Always Invalid Play"; }
+    
+    virtual void calculateInfoForScoredRoles(world::World* world) {}
 };
 
 class AnotherAlwaysTrue : public AlwaysValid {
     using AlwaysValid::AlwaysValid;
+
+    virtual void calculateInfoForScoredRoles(world::World* world) {}
 };
 
 TEST(PlayCheckerTests, testSetPlays) {

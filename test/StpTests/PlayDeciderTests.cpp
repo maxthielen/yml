@@ -62,6 +62,8 @@ class AlwaysFalse : public rtt::ai::stp::Play {
 
 class AnotherAlwaysTrue : public AlwaysValid {
     using AlwaysValid::AlwaysValid;
+
+    virtual void calculateInfoForScoredRoles(world::World* world) {}
 };
 
 TEST(PlayCheckerTests, testHighestScore) {
