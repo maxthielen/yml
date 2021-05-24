@@ -8,30 +8,22 @@
 #include <stp/PlayChecker.hpp>
 
 class trueInvariant : public rtt::ai::stp::invariant::BaseInvariant {
-    uint8_t metricCheck(rtt::world::view::WorldDataView world, const rtt::world::Field *field) const noexcept override { return 255; }
+    uint8_t metricCheck(rtt::world::view::WorldDataView world, const rtt::world::Field* field) const noexcept override { return 255; }
 
-	const char* getName() override
-    {
-        return "true";
-    }
+    const char* getName() override { return "true"; }
 };
 
 class falseInvariant : public rtt::ai::stp::invariant::BaseInvariant {
-    uint8_t metricCheck(rtt::world::view::WorldDataView world, const rtt::world::Field *field) const noexcept override { return 0; }
+    uint8_t metricCheck(rtt::world::view::WorldDataView world, const rtt::world::Field* field) const noexcept override { return 0; }
 
-    const char* getName() override
-    {
-        return "false";
-    }
+    const char* getName() override { return "false"; }
 };
 
 class AlwaysValid : public rtt::ai::stp::Play {
    public:
-    AlwaysValid() : Play() {
-        startPlayInvariants.emplace_back(std::make_unique<trueInvariant>());
-    }
+    AlwaysValid() : Play() { startPlayInvariants.emplace_back(std::make_unique<trueInvariant>()); }
 
-    uint8_t score(rtt::world::World *world) noexcept override { return 100; }
+    uint8_t score(rtt::world::World* world) noexcept override { return 100; }
 
     rtt::ai::Dealer::FlagMap decideRoleFlags() const noexcept override { return {}; }
 
@@ -39,17 +31,15 @@ class AlwaysValid : public rtt::ai::stp::Play {
 
     bool shouldRoleSkipEndTactic() { return false; }
 
-    const char *getName() override { return "Always Valid Play"; }
+    const char* getName() override { return "Always Valid Play"; }
 
     virtual void calculateInfoForScoredRoles(world::World* world) {}
 };
 
 class AlwaysFalse : public rtt::ai::stp::Play {
    public:
-    AlwaysFalse() : Play() {
-        startPlayInvariants.emplace_back(std::make_unique<falseInvariant>());
-    }
-    uint8_t score(rtt::world::World *world) noexcept override { return 0; }
+    AlwaysFalse() : Play() { startPlayInvariants.emplace_back(std::make_unique<falseInvariant>()); }
+    uint8_t score(rtt::world::World* world) noexcept override { return 0; }
 
     rtt::ai::Dealer::FlagMap decideRoleFlags() const noexcept override { return {}; }
 
@@ -57,8 +47,8 @@ class AlwaysFalse : public rtt::ai::stp::Play {
 
     bool shouldRoleSkipEndTactic() { return false; }
 
-    const char *getName() override { return "Always Invalid Play"; }
-    
+    const char* getName() override { return "Always Invalid Play"; }
+
     virtual void calculateInfoForScoredRoles(world::World* world) {}
 };
 
@@ -66,6 +56,8 @@ class AnotherAlwaysTrue : public AlwaysValid {
     using AlwaysValid::AlwaysValid;
 
     virtual void calculateInfoForScoredRoles(world::World* world) {}
+
+    virtual uint8_t score(PlayEvaluator& playEvaluator) {}
 };
 
 TEST(PlayCheckerTests, testSetPlays) {
@@ -91,7 +83,7 @@ TEST(PlayCheckerTests, testValidCount) {
 
     auto const& [_, instance] = rtt::world::World::instance();
 
-    proto::SSL_GeometryFieldSize size {};
+    proto::SSL_GeometryFieldSize size{};
     size.set_field_length(250);
 
     auto world_msg = testhelpers::WorldHelper::getWorldMsg(5, 7, true, size);
