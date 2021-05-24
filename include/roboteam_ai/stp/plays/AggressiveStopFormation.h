@@ -49,7 +49,7 @@ class AggressiveStopFormation : public Play {
      * An example could be BlockRobot and Intercept. You block a robot (endTactic) until a ball is shot and then the robot
      * closest to the ball should try to intercept (skip the BlockRobot tactic to execute Intercept)
      */
-    bool shouldRoleSkipEndTactic() override;
+    bool shouldRoleSkipEndTactic();
 };
 }  // namespace rtt::ai::stp::play
 

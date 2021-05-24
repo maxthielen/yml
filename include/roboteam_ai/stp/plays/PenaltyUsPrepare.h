@@ -43,7 +43,7 @@ class PenaltyUsPrepare : public Play {
     const char* getName() override;
 
    protected:
-    bool shouldRoleSkipEndTactic() override;
+    bool shouldRoleSkipEndTactic();
 };
 }  // namespace rtt::ai::stp::play
 

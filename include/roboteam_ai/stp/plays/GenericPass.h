@@ -51,7 +51,7 @@ class GenericPass : public Play {
      * Checks whether this role should skip the end tactic in its state machine
      * @return whether to skip the end tactic
      */
-    bool shouldRoleSkipEndTactic() override;
+    bool shouldRoleSkipEndTactic();
 
     /**
      * Calculates the pass location

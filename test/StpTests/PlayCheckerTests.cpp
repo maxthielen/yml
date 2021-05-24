@@ -37,7 +37,7 @@ class AlwaysValid : public rtt::ai::stp::Play {
 
     void calculateInfoForRoles() noexcept override {}
 
-    bool shouldRoleSkipEndTactic() override { return false; }
+    bool shouldRoleSkipEndTactic() { return false; }
 
     const char *getName() override { return "Always Valid Play"; }
 };
@@ -53,7 +53,7 @@ class AlwaysFalse : public rtt::ai::stp::Play {
 
     void calculateInfoForRoles() noexcept override {}
 
-    bool shouldRoleSkipEndTactic() override { return false; }
+    bool shouldRoleSkipEndTactic() { return false; }
 
     const char *getName() override { return "Always Invalid Play"; }
 };

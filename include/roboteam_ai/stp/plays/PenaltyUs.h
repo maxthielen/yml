@@ -34,7 +34,7 @@ class PenaltyUs : public Play {
 
     void calculateInfoForRoles() noexcept override;
 
-    bool shouldRoleSkipEndTactic() override;
+    bool shouldRoleSkipEndTactic();
 
     /**
      * Gets the play name
