@@ -23,8 +23,8 @@ namespace rtt::ai::stp::role {
          * @param info TacticInfo to be passed to update()
          * @return The status that the current tactic returns
          */
-        [[nodiscard]] Status update(StpInfo const& info) noexcept override;
+        [[nodiscard]] Status update(StpInfo const &info) noexcept override;
 
-}  // namespace rtt::ai::stp::role
-
+    };  // namespace rtt::ai::stp::role
+}
 #endif  // RTT_DemoKeeper_H
