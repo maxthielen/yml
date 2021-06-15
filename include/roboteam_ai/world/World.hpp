@@ -116,7 +116,7 @@ public:
     void updateField(world::Field &protoField);
 
     /**
-     * Update the position control using the new robot position
+     * Update the position control using the new robot
      */
     void updatePositionControl();
 

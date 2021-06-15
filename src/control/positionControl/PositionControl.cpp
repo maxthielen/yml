@@ -11,7 +11,7 @@
 namespace rtt::ai::control {
     RobotCommand
     PositionControl::computeAndTrackPath(const rtt::world::Field &field, int robotId, const Vector2 &currentPosition, const Vector2 &currentVelocity, const Vector2 &targetPosition,
-                                     stp::PIDType pidType) {
+                                     stp::PIDType pidType, std::optional<rtt::world::view::RobotView> robot) {
         collisionDetector.setField(field);
 
         // if the target position is outside of the field (i.e. bug in AI), do nothing
@@ -22,12 +22,12 @@ namespace rtt::ai::control {
 
         // if the robot is close to the final position and can't get there, stop
         if ((currentPosition - targetPosition).length() < FINAL_AVOIDANCE_DISTANCE &&
-            collisionDetector.getRobotCollisionBetweenPoints(currentPosition, targetPosition)) {
+            collisionDetector.getRobotCollisionBetweenPoints(currentPosition, targetPosition, robot)) {
             RTT_INFO("Path collides with something close to the target position for robot ID ", robotId)
             return {};
         }
-        if (shouldRecalculatePath(currentPosition, targetPosition, currentVelocity, robotId)) {
-            computedPaths[robotId] = pathPlanningAlgorithm.computePath(currentPosition, targetPosition);
+        if (shouldRecalculatePath(currentPosition, targetPosition, currentVelocity, robot)) {
+            computedPaths[robotId] = pathPlanningAlgorithm.computePath(currentPosition, targetPosition, robot);
         }
         interface::Input::drawData(interface::Visual::PATHFINDING, computedPaths[robotId], Qt::green, robotId, interface::Drawing::LINES_CONNECTED);
         interface::Input::drawData(interface::Visual::PATHFINDING, {computedPaths[robotId].front(), currentPosition}, Qt::green, robotId, interface::Drawing::LINES_CONNECTED);
@@ -43,15 +43,15 @@ namespace rtt::ai::control {
     }
 
     bool PositionControl::shouldRecalculatePath(const Vector2 &currentPosition, const Vector2 &targetPos,
-                                                const Vector2 &currentVelocity, int robotId) {
-        return computedPaths[robotId].empty() ||
-               PositionControlUtils::isTargetChanged(targetPos, computedPaths[robotId].back()) ||
+                                                const Vector2 &currentVelocity, std::optional<rtt::world::view::RobotView> robot) {
+        return computedPaths[robot->get()->getId()].empty() ||
+               PositionControlUtils::isTargetChanged(targetPos, computedPaths[robot->get()->getId()].back()) ||
                (currentVelocity != Vector2(0, 0) &&
-                collisionDetector.isCollisionBetweenPoints(currentPosition, computedPaths[robotId].front()));
+                collisionDetector.isCollisionBetweenPoints(currentPosition, computedPaths[robot->get()->getId()].front(), robot));
     }
 
-    void PositionControl::setRobotPositions(std::vector<Vector2> &robotPositions) {
-        collisionDetector.setRobotPositions(robotPositions);
+    void PositionControl::setRobots(std::vector<rtt::world::view::RobotView> &robots) {
+        collisionDetector.setRobots(robots);
     }
 
     rtt::BB::CommandCollision PositionControl::computeAndTrackPathBBT(const rtt::world::World *world, const rtt::world::Field &field, int robotId, Vector2 currentPosition,

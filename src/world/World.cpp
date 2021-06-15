@@ -98,9 +98,10 @@ namespace rtt::world {
     }
 
     void World::updatePositionControl() {
-        std::vector<Vector2> robotPositions(getWorld()->getRobotsNonOwning().size());
-        std::transform(getWorld()->getRobotsNonOwning().begin(), getWorld()->getRobotsNonOwning().end(), robotPositions.begin(), [](const auto& robot) -> Vector2 { return (robot->getPos()); });
-        positionControl.setRobotPositions(robotPositions);
+        std::vector<rtt::world::view::RobotView> robots{};
+        robots.reserve(getWorld()->getRobotsNonOwning().size());
+        std::transform(getWorld()->getRobotsNonOwning().begin(), getWorld()->getRobotsNonOwning().end(), robots.begin(), [](const auto& robot) { return (robot); });
+        positionControl.setRobots(robots);
     }
 
     uint64_t World::getTimeDifference() const noexcept { return tickDuration; }

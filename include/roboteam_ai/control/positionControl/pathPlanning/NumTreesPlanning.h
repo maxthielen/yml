@@ -49,7 +49,9 @@ class NumTreesPlanning : public PathPlanningAlgorithm {
      * @param targetPosition the goal position
      * @return a list of points representing the path
      */
-    std::vector<Vector2> computePath(const Vector2 &robotPosition, const Vector2 &targetPosition) override;
+    std::vector<Vector2> computePath(const Vector2 &robotPosition, const Vector2 &targetPosition, std::optional<rtt::world::view::RobotView> robot);
+
+    std::vector<Vector2> computePath(const Vector2 &robotPosition, const Vector2 &targetPosition) override {};
 };
 }  // namespace rtt::ai::control
 

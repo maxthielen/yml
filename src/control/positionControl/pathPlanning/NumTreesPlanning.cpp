@@ -7,7 +7,7 @@
 namespace rtt::ai::control {
 NumTreesPlanning::NumTreesPlanning(CollisionDetector &collisionDetector) : PathPlanningAlgorithm(collisionDetector) {}
 
-std::vector<Vector2> NumTreesPlanning::computePath(const Vector2 &robotPosition, const Vector2 &targetPosition) {
+std::vector<Vector2> NumTreesPlanning::computePath(const Vector2 &robotPosition, const Vector2 &targetPosition, std::optional<rtt::world::view::RobotView> robot) {
     auto root = PathPointNode(robotPosition);
     std::queue<PathPointNode> pointQueue;
     pointQueue.push(root);
@@ -33,7 +33,7 @@ std::vector<Vector2> NumTreesPlanning::computePath(const Vector2 &robotPosition,
             if (!collisionDetector.isPointInsideField(point.getPosition())) {
                 continue;
             }
-            auto parentCollision = collisionDetector.getCollisionBetweenPoints(point.getParent()->getPosition(), point.getPosition());
+            auto parentCollision = collisionDetector.getCollisionBetweenPoints(point.getParent()->getPosition(), point.getPosition(), robot);
             if (parentCollision) {
                 auto branches = branchPath(*point.getParent(), parentCollision.value(), targetPosition);
                 std::for_each(branches.begin(), branches.end(), [&pointQueue](PathPointNode &newPoint) { pointQueue.push(newPoint); });
@@ -45,7 +45,7 @@ std::vector<Vector2> NumTreesPlanning::computePath(const Vector2 &robotPosition,
             }
         }
 
-        auto collision = collisionDetector.getCollisionBetweenPoints(point.getPosition(), targetPosition);
+        auto collision = collisionDetector.getCollisionBetweenPoints(point.getPosition(), targetPosition, robot);
 
         // no initial collision
         if (!collision) {

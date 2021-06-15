@@ -19,7 +19,7 @@ class CollisionDetector {
    private:
     static constexpr double DEFAULT_ROBOT_COLLISION_RADIUS = 3.0 * Constants::ROBOT_RADIUS();
 
-    std::vector<Vector2> robotPositions;
+    std::vector<rtt::world::view::RobotView> robots;
     const rtt_world::Field* field = nullptr;
 
    public:
@@ -30,7 +30,7 @@ class CollisionDetector {
      * @param nextPoint the destination point
      * @return true if there is no collision, false otherwise
      */
-    bool isCollisionBetweenPoints(const Vector2& initialPoint, const Vector2& nextPoint);
+    bool isCollisionBetweenPoints(const Vector2& initialPoint, const Vector2& nextPoint, std::optional<rtt::world::view::RobotView> robot);
 
     /**
      * Checks whether the line drawn by the two points comes close to any robot (excepting the current one)
@@ -40,7 +40,7 @@ class CollisionDetector {
      * @param currentRobotPosition the current robot position (should be ignored when checking)
      * @return the colliding robot position, or a std::nullopt if there is no collision
      */
-    std::optional<Vector2> getRobotCollisionBetweenPoints(const Vector2& initialPoint, const Vector2& nextPoint);
+    std::optional<Vector2> getRobotCollisionBetweenPoints(const Vector2& initialPoint, const Vector2& nextPoint, std::optional<rtt::world::view::RobotView> robot);
 
     /**
      * Check if the point is inside the field
@@ -64,13 +64,13 @@ class CollisionDetector {
      * @param nextPoint second point of the line
      * @return the closest collision point with a robot / the defense area; std::nullopt if no collisions
      */
-    std::optional<Vector2> getCollisionBetweenPoints(const Vector2& point, const Vector2& nextPoint);
+    std::optional<Vector2> getCollisionBetweenPoints(const Vector2& point, const Vector2& nextPoint, std::optional<rtt::world::view::RobotView> robot);
 
-    std::vector<Vector2> getRobotPositions();
+    std::vector<rtt::world::view::RobotView> getRobots();
 
     void setField(const rtt_world::Field& field);
 
-    void setRobotPositions(std::vector<Vector2> &robotPositions);
+    void setRobots(std::vector<rtt::world::view::RobotView> &robots);
 };
 
 }  // namespace rtt::ai::control

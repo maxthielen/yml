@@ -47,14 +47,13 @@ namespace rtt::ai::control {
          */
         RobotCommand computeAndTrackPath(const rtt_world::Field &field, int robotId, const Vector2 &currentPosition,
                                          const Vector2 &currentVelocity, const Vector2 &targetPosition,
-                                         stp::PIDType pidType);
+                                         stp::PIDType pidType, std::optional<rtt::world::view::RobotView> robot);
 
         /**
          * Updates the robot view vector
-         * @param robotPositions the position vector of the robots
+         * @param robots the vector of the robots
          */
-        void setRobotPositions(std::vector<Vector2> &robotPositions);
-
+        void setRobots(std::vector<rtt::world::view::RobotView> &robots);
 
         /**
          * The computed path should be recalculated if: <br>
@@ -66,7 +65,7 @@ namespace rtt::ai::control {
          * @return true if one of the above conditions are true, false otherwise
          */
         bool shouldRecalculatePath(const Vector2 &currentPosition, const Vector2 &targetPos,
-                                   const Vector2 &currentVelocity, int robotId);
+                                   const Vector2 &currentVelocity, std::optional<rtt::world::view::RobotView> robot);
 
         /**
          * @brief Generates a path and tracks it with the old PID control (hacky). Returns also possibly
