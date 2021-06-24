@@ -54,13 +54,16 @@ std::unordered_map<std::string, v::RobotView> Dealer::distribute(std::vector<v::
                 for (std::size_t j = 0; j < current.newAssignments.size(); j++) {
                     std::cout << "output.size: " << output.size() << std::endl;
                     std::cout << "allRobots.size: " << allRobots.size() << std::endl;
-                    if (output.size() < allRobots.size() && current.newAssignments[j] >= 0) {
+                    if (current.newAssignments[j] >= 0) {
                         current.currentIDs.push_back(current.newAssignments[j]);                    // get newly assigned robot from current index
                         current.originalIDsIndex.push_back(indexID[current.currentIDs.back()]);     // get robot number
                         output.insert({roleNames[current.originalRolesIndex[j]], allRobots[current.originalIDsIndex.back()]});
                     }
+                    if (output.size() == allRobots.size()) {
+                        std::cout << "There are less than 11 robots!" << std::endl;
+                        return output;               // case if there are less then 11 bots to distribute
+                    }
                 }
-                if (output.size() == allRobots.size()) return output;               // case if there are less then 11 bots to distribute
                 distribute_remove(current,indexRoles,indexID,scores);
             }
         }
