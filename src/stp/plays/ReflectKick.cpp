@@ -65,16 +65,15 @@ namespace rtt::ai::stp::play {
         Dealer::DealerFlag closeToTheirGoalFlag(DealerFlagTitle::CLOSE_TO_THEIR_GOAL,
                                                 DealerFlagPriority::MEDIUM_PRIORITY);
         Dealer::DealerFlag closeToOurGoalFlag(DealerFlagTitle::CLOSE_TO_OUR_GOAL, DealerFlagPriority::MEDIUM_PRIORITY);
-        Dealer::DealerFlag notImportant(DealerFlagTitle::NOT_IMPORTANT, DealerFlagPriority::LOW_PRIORITY);
 
         flagMap.insert({"keeper", {DealerFlagPriority::KEEPER, {}}});
         flagMap.insert({"reflector", {DealerFlagPriority::REQUIRED, {closeToTheirGoalFlag}}});
         flagMap.insert({"passer", {DealerFlagPriority::REQUIRED, {closeToBallFlag}}});
-        flagMap.insert({"offender_1", {DealerFlagPriority::LOW_PRIORITY, {notImportant}}});
-        flagMap.insert({"offender_2", {DealerFlagPriority::LOW_PRIORITY, {notImportant}}});
-        flagMap.insert({"midfielder_1", {DealerFlagPriority::LOW_PRIORITY, {notImportant}}});
-        flagMap.insert({"midfielder_2", {DealerFlagPriority::LOW_PRIORITY, {notImportant}}});
-        flagMap.insert({"midfielder_3", {DealerFlagPriority::LOW_PRIORITY, {notImportant}}});
+        flagMap.insert({"offender_1", {DealerFlagPriority::LOW_PRIORITY, {}}});
+        flagMap.insert({"offender_2", {DealerFlagPriority::LOW_PRIORITY, {}}});
+        flagMap.insert({"midfielder_1", {DealerFlagPriority::LOW_PRIORITY, {}}});
+        flagMap.insert({"midfielder_2", {DealerFlagPriority::LOW_PRIORITY, {}}});
+        flagMap.insert({"midfielder_3", {DealerFlagPriority::LOW_PRIORITY, {}}});
         flagMap.insert({"defender_1", {DealerFlagPriority::MEDIUM_PRIORITY, {closeToOurGoalFlag}}});
         flagMap.insert({"defender_2", {DealerFlagPriority::MEDIUM_PRIORITY, {closeToOurGoalFlag}}});
         flagMap.insert({"defender_3", {DealerFlagPriority::MEDIUM_PRIORITY, {closeToOurGoalFlag}}});
