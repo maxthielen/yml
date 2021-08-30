@@ -3,12 +3,15 @@
 //
 
 #include <gtest/gtest.h>
-#include <test/helpers/WorldHelper.h>
+#include <helpers/WorldHelper.h>
 
 #include <stp/PlayChecker.hpp>
+#include <stp/evaluations/BaseEvaluation.h>
+#include <stp/Play.hpp>
+#include <stp/PlayEvaluator.h>
 
 class trueInvariant : public rtt::ai::stp::evaluation::BaseEvaluation {
-    uint8_t metricCheck(rtt::world::view::WorldDataView world, const rtt::world::Field *field) const noexcept override { return 255; }
+    uint8_t metricCheck(const rtt::world::World* world, const rtt::world::Field *field) const noexcept override { return 255; }
 
 	const char* getName() override
     {
@@ -17,7 +20,7 @@ class trueInvariant : public rtt::ai::stp::evaluation::BaseEvaluation {
 };
 
 class falseInvariant : public rtt::ai::stp::evaluation::BaseEvaluation {
-    uint8_t metricCheck(rtt::world::view::WorldDataView world, const rtt::world::Field *field) const noexcept override { return 0; }
+    uint8_t metricCheck(const rtt::world::World* world, const rtt::world::Field *field) const noexcept override { return 0; }
 
     const char* getName() override
     {
@@ -31,13 +34,13 @@ class AlwaysValid : public rtt::ai::stp::Play {
         startPlayInvariants.emplace_back(std::make_unique<trueInvariant>());
     }
 
-    uint8_t score(rtt::world::World *world) noexcept override { return 100; }
+    uint8_t score(rtt::PlayEvaluator& playEvaluator) noexcept override { return 100; }
 
     rtt::ai::Dealer::FlagMap decideRoleFlags() const noexcept override { return {}; }
 
     void calculateInfoForRoles() noexcept override {}
 
-    bool shouldRoleSkipEndTactic() override { return false; }
+//    bool shouldRoleSkipEndTactic() override { return false; }
 
     const char *getName() override { return "Always Valid Play"; }
 };
@@ -47,13 +50,13 @@ class AlwaysFalse : public rtt::ai::stp::Play {
     AlwaysFalse() : Play() {
         startPlayInvariants.emplace_back(std::make_unique<falseInvariant>());
     }
-    uint8_t score(rtt::world::World *world) noexcept override { return 0; }
+    uint8_t score(PlayEvaluator& playEvaluator) noexcept override { return 0; }
 
     rtt::ai::Dealer::FlagMap decideRoleFlags() const noexcept override { return {}; }
 
     void calculateInfoForRoles() noexcept override {}
 
-    bool shouldRoleSkipEndTactic() override { return false; }
+//    bool shouldRoleSkipEndTactic() override { return false; }
 
     const char *getName() override { return "Always Invalid Play"; }
 };

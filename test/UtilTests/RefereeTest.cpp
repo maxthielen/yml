@@ -4,7 +4,7 @@
 
 #include <interface/api/Output.h>
 #include <roboteam_proto/messages_robocup_ssl_referee.pb.h>
-#include <include/roboteam_ai/world/World.hpp>
+#include <roboteam_ai/world/World.hpp>
 #include "helpers/WorldHelper.h"
 #include "helpers/FieldHelper.h"
 

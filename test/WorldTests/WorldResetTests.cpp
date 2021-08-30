@@ -4,8 +4,8 @@
 #define RUNNING_TEST
 
 #include <gtest/gtest.h>
-#include <include/roboteam_ai/world/World.hpp>
-#include <test/helpers/WorldHelper.h>
+#include <roboteam_ai/world/World.hpp>
+#include <helpers/WorldHelper.h>
 
 TEST(worldTest, GenericWorldRemoval) {
     namespace w_n = rtt::world;

@@ -10,17 +10,8 @@ set(CMAKE_INCLUDE_CURRENT_DIR OFF) #Find includes in corresponding build directo
 #for MacOS X or iOS, watchOS, tvOS(since 3.10.3)
 if (APPLE)
     set(CMAKE_AUTOMOC OFF)
-    set(GTEST_LIB
-            /usr/local/lib/libgtest.a
-            /usr/local/lib/libgtest_main.a
-            /usr/local/lib/libgmock.a
-            /usr/local/lib/libgmock_main.a
-            )
 else (NOT APPLE)
     set(CMAKE_AUTOMOC ON)
-    set(GTEST_LIB
-            PRIVATE gtest
-            PRIVATE gmock)
 endif ()
 
 find_package(Qt5 COMPONENTS Core Widgets Gui Charts REQUIRED)
@@ -203,7 +194,6 @@ set(CONTROL_SOURCES
         )
 
 set(TEST_SOURCES
-        ${PROJECT_SOURCE_DIR}/test/main.cpp
         ${PROJECT_SOURCE_DIR}/test/ControlTests/ControlUtilsTest.cpp
         ${PROJECT_SOURCE_DIR}/test/UtilTests/RefereeTest.cpp
         ${PROJECT_SOURCE_DIR}/test/helpers/WorldHelper.h
@@ -217,8 +207,8 @@ set(TEST_SOURCES
         ${PROJECT_SOURCE_DIR}/test/WorldTests/HistoryRetrievalTest.cpp
         ${PROJECT_SOURCE_DIR}/test/WorldTests/WhichRobotHasBallTest.cpp
         ${PROJECT_SOURCE_DIR}/test/WorldTests/WorldResetTests.cpp
-        ${PROJECT_SOURCE_DIR}/test/StpTests/PlayCheckerTests.cpp
-        ${PROJECT_SOURCE_DIR}/test/StpTests/PlayDeciderTests.cpp
+#        ${PROJECT_SOURCE_DIR}/test/StpTests/PlayCheckerTests.cpp
+#        ${PROJECT_SOURCE_DIR}/test/StpTests/PlayDeciderTests.cpp
         ${PROJECT_SOURCE_DIR}/test/StpTests/TacticTests.cpp
         test/ControlTests/BBTrajectory/BBTrajectory1DTest.cpp)
 
@@ -315,7 +305,7 @@ target_link_libraries(ai_iface ${AI_LIBS})
 target_include_directories(ai_iface ${AI_INCLUDES})
 
 add_library(ai_lib ${AI_SOURCES})
-target_link_libraries(ai_lib ${AI_LIBS})
+target_link_libraries(ai_lib ${AI_LIBS} GTest::gtest GTest::gtest_main)
 target_include_directories(ai_lib ${AI_INCLUDES})
 
 # Main Executable
@@ -323,9 +313,9 @@ add_executable(roboteam_ai src/roboteam_ai.cpp)
 target_link_libraries(roboteam_ai ${AI_LIBS} ai_lib ai_iface)
 target_include_directories(roboteam_ai ${AI_INCLUDES})
 
-# Testing #
-#add_executable(ai_tests ${TEST_SOURCES})
+# Testing
+add_executable(roboteam_ai_tests ${TEST_SOURCES})
 
-#target_link_libraries(ai_tests ${AI_LIBS} ${GTEST_LIB} ai_lib)
-#target_include_directories(ai_tests ${AI_INCLUDES} test)
+target_link_libraries(roboteam_ai_tests ${AI_LIBS} ai_lib GTest::gtest GTest::gmock GTest::gmock_main)
+target_include_directories(roboteam_ai_tests ${AI_INCLUDES} test/)
 

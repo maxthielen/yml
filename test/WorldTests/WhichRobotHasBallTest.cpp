@@ -3,8 +3,8 @@
 //
 
 #include <gtest/gtest.h>
-#include <test/helpers/WorldHelper.h>
-#include <include/roboteam_ai/world/World.hpp>
+#include <helpers/WorldHelper.h>
+#include <roboteam_ai/world/World.hpp>
 
 TEST(worldTest, WhichRobotHasBallTest) {
     // set us to yellow
