@@ -132,6 +132,8 @@ set(PLAYS_SOURCES
         ${PROJECT_SOURCE_DIR}/src/stp/plays/referee_specific/PenaltyUs.cpp
         ${PROJECT_SOURCE_DIR}/src/stp/plays/referee_specific/PenaltyUsPrepare.cpp
         ${PROJECT_SOURCE_DIR}/src/stp/plays/referee_specific/TimeOut.cpp
+        # celebrations/
+        ${PROJECT_SOURCE_DIR}/src/stp/plays/celebrations/danceOff.cpp
         )
 
 set(EVALUATION_SOURCES
@@ -237,7 +239,7 @@ set(INTERFACE_HEADERS
         ${PROJECT_SOURCE_DIR}/include/roboteam_ai/interface/widgets/ManualControlWidget.h
         ${PROJECT_SOURCE_DIR}/include/roboteam_ai/interface/widgets/PlaysWidget.hpp
         ${PROJECT_SOURCE_DIR}/include/roboteam_ai/interface/widgets/GraphWidget.h
-        )
+        include/roboteam_ai/stp/plays/celebrations/danceOff.h src/stp/plays/celebrations/danceOff.cpp)
 
 set(INTERFACE_SOURCES
         ${PROJECT_SOURCE_DIR}/src/interface/widgets/mainWindow.cpp

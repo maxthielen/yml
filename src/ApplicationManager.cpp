@@ -35,6 +35,7 @@
 #include "stp/plays/referee_specific/PenaltyUs.h"
 #include "stp/plays/referee_specific/PenaltyUsPrepare.h"
 #include "stp/plays/ReflectKick.h"
+#include "stp/plays/celebrations/danceOff.h"
 //#include "stp/plays/TestPlay.h"
 
 namespace io = rtt::ai::io;
@@ -77,6 +78,7 @@ void ApplicationManager::start() {
     plays.emplace_back(std::make_unique<rtt::ai::stp::play::GetBallRisky>());
     plays.emplace_back(std::make_unique<rtt::ai::stp::play::ReflectKick>());
     plays.emplace_back(std::make_unique<rtt::ai::stp::play::GenericPass>());
+    plays.emplace_back(std::make_unique<rtt::ai::stp::play::DanceOff>());
     playChecker.setPlays(plays);
 
     int amountOfCycles = 0;
