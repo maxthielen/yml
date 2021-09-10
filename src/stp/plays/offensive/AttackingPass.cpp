@@ -167,18 +167,37 @@ namespace rtt::ai::stp::play {
 
         /// If no good pass found, pass to closest robot
         if (passLocation == Vector2{0, 0}) {
+            RTT_DEBUG("NO GOOF PASS FOUND!");
             passLocation = world->getWorld()->getRobotClosestToPoint(stpInfos["passer"].getPositionToMoveTo().value(),
                                                                      world::us)->get()->getPos();
         }
+        else{
+            RTT_DEBUG("FOUND PASS");
+        }
 
         /// Receiver should intercept when constraints are met
+        auto rightDis = receiverPositionRight.position - passLocation;
+        auto leftDis = receiverPositionLeft.position - passLocation;
+
         if (ball->getVelocity().length() > control_constants::HAS_KICKED_ERROR_MARGIN) {
+            RTT_DEBUG(passLocation);
+            if (rightDis.length() < leftDis.length()){
+                receiverPositionRight.position = Line(ball->getPos(), ball->getPos() + ball->getFilteredVelocity()).project(
+                        passLocation);
+            }
+            else{
+                receiverPositionLeft.position = Line(ball->getPos(), ball->getPos() + ball->getFilteredVelocity()).project(
+                        passLocation);
+            }
+        }
+
+        /*if (ball->getVelocity().length() > control_constants::HAS_KICKED_ERROR_MARGIN) {
             receiverPositionLeft.position = Line(ball->getPos(), ball->getPos() + ball->getFilteredVelocity()).project(
                     passLocation);
         } else if (ball->getVelocity().length() > control_constants::HAS_KICKED_ERROR_MARGIN) {
             receiverPositionRight.position = Line(ball->getPos(), ball->getPos() + ball->getFilteredVelocity()).project(
                     passLocation);
-        }
+        }*/
 
         // Receiver
         stpInfos["receiver_left"].setPositionToMoveTo(receiverPositionLeft.position);

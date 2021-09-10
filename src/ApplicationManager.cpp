@@ -1,14 +1,15 @@
 #include "ApplicationManager.h"
 
-#include <chrono>
-
 #include <roboteam_utils/Timer.h>
 #include <roboteam_utils/normalize.h>
+#include <stp/plays/dance/Dance.h>
 #include <stp/plays/referee_specific/TimeOut.h>
 
+#include <chrono>
+
+#include "control/ControlModule.h"
 #include "utilities/GameStateManager.hpp"
 #include "utilities/IOManager.h"
-#include "control/ControlModule.h"
 
 /**
  * Plays are included here
@@ -77,6 +78,7 @@ void ApplicationManager::start() {
     plays.emplace_back(std::make_unique<rtt::ai::stp::play::GetBallRisky>());
     plays.emplace_back(std::make_unique<rtt::ai::stp::play::ReflectKick>());
     plays.emplace_back(std::make_unique<rtt::ai::stp::play::GenericPass>());
+    plays.emplace_back(std::make_unique<rtt::ai::stp::play::Dance>());
     playChecker.setPlays(plays);
 
     int amountOfCycles = 0;

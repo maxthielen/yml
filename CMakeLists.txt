@@ -50,7 +50,7 @@ set(SKILLS_SOURCES
         ${PROJECT_SOURCE_DIR}/src/stp/skills/GoToPos.cpp
         ${PROJECT_SOURCE_DIR}/src/stp/skills/Shoot.cpp
         ${PROJECT_SOURCE_DIR}/src/stp/skills/Orbit.cpp
-        )
+        ${PROJECT_SOURCE_DIR}/src/stp/skills/Circle.cpp )
 
 set(TACTICS_SOURCES
         ${PROJECT_SOURCE_DIR}/src/stp/Tactic.cpp
@@ -68,6 +68,7 @@ set(TACTICS_SOURCES
         ${PROJECT_SOURCE_DIR}/src/stp/tactics/active/KickAtPos.cpp
         ${PROJECT_SOURCE_DIR}/src/stp/tactics/active/Receive.cpp
         ${PROJECT_SOURCE_DIR}/src/stp/tactics/active/ShootAtPos.cpp
+        ${PROJECT_SOURCE_DIR}/src/stp/tactics/active/DoDance.cpp
         # passive/
         ${PROJECT_SOURCE_DIR}/src/stp/tactics/passive/AvoidBall.cpp
         ${PROJECT_SOURCE_DIR}/src/stp/tactics/passive/BlockBall.cpp
@@ -89,13 +90,15 @@ set(ROLES_SOURCES
         ${PROJECT_SOURCE_DIR}/src/stp/roles/active/BallReflector.cpp
         ${PROJECT_SOURCE_DIR}/src/stp/roles/active/Passer.cpp
         ${PROJECT_SOURCE_DIR}/src/stp/roles/active/PassReceiver.cpp
+        ${PROJECT_SOURCE_DIR}/src/stp/roles/active/Dancer.cpp
         # passive
         ${PROJECT_SOURCE_DIR}/src/stp/roles/passive/BallAvoider.cpp
         ${PROJECT_SOURCE_DIR}/src/stp/roles/passive/Defender.cpp
         ${PROJECT_SOURCE_DIR}/src/stp/roles/passive/Formation.cpp
         ${PROJECT_SOURCE_DIR}/src/stp/roles/passive/Halt.cpp
         ${PROJECT_SOURCE_DIR}/src/stp/roles/passive/Harasser.cpp
-        ${PROJECT_SOURCE_DIR}/src/stp/roles/passive/Waller.cpp)
+        ${PROJECT_SOURCE_DIR}/src/stp/roles/passive/Waller.cpp
+        )
 
 set(PLAYS_SOURCES
         ${PROJECT_SOURCE_DIR}/src/stp/Play.cpp
@@ -132,6 +135,8 @@ set(PLAYS_SOURCES
         ${PROJECT_SOURCE_DIR}/src/stp/plays/referee_specific/PenaltyUs.cpp
         ${PROJECT_SOURCE_DIR}/src/stp/plays/referee_specific/PenaltyUsPrepare.cpp
         ${PROJECT_SOURCE_DIR}/src/stp/plays/referee_specific/TimeOut.cpp
+        # Dance /
+        ${PROJECT_SOURCE_DIR}/src/stp/plays/dance/Dance.cpp
         )
 
 set(EVALUATION_SOURCES
@@ -237,7 +242,7 @@ set(INTERFACE_HEADERS
         ${PROJECT_SOURCE_DIR}/include/roboteam_ai/interface/widgets/ManualControlWidget.h
         ${PROJECT_SOURCE_DIR}/include/roboteam_ai/interface/widgets/PlaysWidget.hpp
         ${PROJECT_SOURCE_DIR}/include/roboteam_ai/interface/widgets/GraphWidget.h
-        )
+        include/roboteam_ai/stp/plays/dance/DoDance.h src/stp/plays/dance/Dance.cpp)
 
 set(INTERFACE_SOURCES
         ${PROJECT_SOURCE_DIR}/src/interface/widgets/mainWindow.cpp
@@ -283,8 +288,7 @@ set(AI_SOURCES
         ${INTERFACE_SOURCES}
         ${WORLD_SOURCES}
         ${MANUAL_SOURCES}
-        ${COMPUTATION_SOURCES}
-        )
+        ${COMPUTATION_SOURCES})
 
 set(AI_LIBS
         PRIVATE Qt5::Core
