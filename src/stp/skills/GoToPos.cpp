@@ -16,7 +16,7 @@ Status GoToPos::onUpdate(const StpInfo &info) noexcept {
         targetPos = control::ControlUtils::projectPositionToWithinField(info.getField().value(), targetPos, control_constants::ROBOT_RADIUS);
     }
 
-    bool useOldPathPlanning = true;
+    bool useOldPathPlanning = false;
     rtt::BB::CommandCollision commandCollision;
 
     if(useOldPathPlanning) {
