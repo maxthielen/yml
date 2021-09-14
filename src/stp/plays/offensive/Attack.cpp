@@ -75,7 +75,7 @@ void Attack::calculateInfoForRoles() noexcept {
     // Attacker
     auto goalTarget = computations::GoalComputations::calculateGoalTarget(world, field);
     stpInfos["attacker"].setPositionToShootAt(goalTarget);
-    stpInfos["attacker"].setShotType(ShotType::PASS);
+    stpInfos["attacker"].setShotType(ShotType::MAX);
 
     // Offenders
     stpInfos["offender_1"].setPositionToMoveTo(Vector2(field.getFieldLength() / 4, field.getFieldWidth() / 4));

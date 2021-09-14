@@ -90,6 +90,7 @@ bool ShootAtPos::shouldTacticReset(const StpInfo &info) noexcept {
         return false;
     }
     if (skills.current_num() != 0) {
+        RTT_DEBUG("TACTIC RESET");
         double errorMargin = stp::control_constants::GO_TO_POS_ANGLE_ERROR_MARGIN * M_PI;
         return info.getRobot().value()->getAngle().shortestAngleDiff(info.getAngle()) > errorMargin;
     }
