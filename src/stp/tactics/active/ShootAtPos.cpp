@@ -81,18 +81,26 @@ bool ShootAtPos::isEndTactic() noexcept {
 bool ShootAtPos::isTacticFailing(const StpInfo &info) noexcept {
     // Fail tactic if:
     // robot doesn't have the ball or if there is no shootTarget
-    return (!info.getRobot()->hasBall() && info.getBall()->get()->getFilteredVelocity().length() < control_constants::BALL_STILL_VEL) || !info.getPositionToShootAt();
+    /*if (!info.getRobot()->hasBall()){
+        RTT_DEBUG("SHOOTATPOS FAILED, DOES NOT HAVE BALL");
+        return true;
+    }
+    if (!info.getPositionToShootAt()){
+        RTT_DEBUG("SHOOTATPOS FAILED, DOES NOT HAVE TARGET");
+        return true;
+    }
+    return !info.getRobot()->hasBall() || !info.getPositionToShootAt();*/
+    return false;
 }
 
 bool ShootAtPos::shouldTacticReset(const StpInfo &info) noexcept {
     // Reset when angle is wrong outside of the rotate skill, reset to rotate again
-    if (info.getBall().value()->getVelocity().length() > control_constants::BALL_STILL_VEL) {
-        return false;
-    }
     if (skills.current_num() != 0) {
-        RTT_DEBUG("TACTIC RESET");
         double errorMargin = stp::control_constants::GO_TO_POS_ANGLE_ERROR_MARGIN * M_PI;
-        return info.getRobot().value()->getAngle().shortestAngleDiff(info.getAngle()) > errorMargin;
+        if (info.getRobot().value()->getAngle().shortestAngleDiff(info.getAngle()) > errorMargin){
+            RTT_DEBUG("TACTIC RESET");
+            return true;
+        }
     }
     return false;
 }
