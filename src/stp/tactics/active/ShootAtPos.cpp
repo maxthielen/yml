@@ -81,15 +81,13 @@ bool ShootAtPos::isEndTactic() noexcept {
 bool ShootAtPos::isTacticFailing(const StpInfo &info) noexcept {
     // Fail tactic if:
     // robot doesn't have the ball or if there is no shootTarget
-    /*if (!info.getRobot()->hasBall()){
-        RTT_DEBUG("SHOOTATPOS FAILED, DOES NOT HAVE BALL");
+    if (!info.getRobot()->hasBall() && info.getBall()->get()->getFilteredVelocity().length() < control_constants::BALL_STILL_VEL){
         return true;
     }
     if (!info.getPositionToShootAt()){
-        RTT_DEBUG("SHOOTATPOS FAILED, DOES NOT HAVE TARGET");
         return true;
     }
-    return !info.getRobot()->hasBall() || !info.getPositionToShootAt();*/
+    RTT_DEBUG("not failing")
     return false;
 }
 

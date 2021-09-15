@@ -70,8 +70,8 @@ Dealer::FlagMap Dance::decideRoleFlags() const noexcept {
 uint8_t Dance::score(PlayEvaluator& playEvaluator) noexcept {
     /// calculateInfoForScoredRoles(playEvaluator.getWorld()); /// DISABLE IF NOT USED
     /// List of all factors that combined results in an evaluation how good the play is.
-    scoring = {{playEvaluator.getGlobalEvaluation(eval::BallCloseToUs),1.0}};
-    return (lastScore = playEvaluator.calculateScore(scoring)).value(); // DONT TOUCH.
+    scoring = {{playEvaluator.getGlobalEvaluation(GlobalEvaluation::BallCloseToUs), 0}};
+    return (lastScore = playEvaluator.calculateScore(scoring)).value();
 }
 
 void Dance::calculateInfoForRoles() noexcept {

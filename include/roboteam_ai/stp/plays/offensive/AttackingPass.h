@@ -65,7 +65,7 @@ class AttackingPass : public Play {
     /**
      * Calculates all info that is necessary for a correct pass
      * The passer will get a position to pass to
-     * Receivers will get positions to receive at, of which one will actually intercept the ball once it is close enough
+     * Receivers will get positions to receive at, of which one will actually intercept the ball once it is shot
      * @param ball
      */
     void calculateInfoForPass(const world::ball::Ball* ball) noexcept;

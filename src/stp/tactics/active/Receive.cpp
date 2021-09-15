@@ -27,8 +27,10 @@ std::optional<StpInfo> Receive::calculateInfoForSkill(StpInfo const &info) noexc
     skillStpInfo.setPidType(PIDType::RECEIVE);
 
     // If ball is close to robot, turn on dribbler
-    skillStpInfo.setDribblerSpeed(100);
-
+    auto balldistance = (info.getBall().value()->getPos() - info.getRobot().value()->getPos()).length();
+    if (balldistance < control_constants::TURN_ON_DRIBBLER_DISTANCE) {
+        skillStpInfo.setDribblerSpeed(100);
+    }
     return skillStpInfo;
 }
 
@@ -49,11 +51,12 @@ bool Receive::isEndTactic() noexcept {
 }
 
 double Receive::calculateAngle(const world::view::RobotView &robot, const world::view::BallView &ball) {
-    if (robot->getDistanceToBall() <= 0.8) {
+    /*if (robot->getDistanceToBall() <= 0.8) {
         return robot->getAngle();
     } else {
         return (ball->getPos() - robot->getPos()).angle();
-    }
+    }*/
+    return (ball->getPos() - robot->getPos()).angle();
 }
 
 const char *Receive::getName() { return "Receive"; }

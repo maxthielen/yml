@@ -48,10 +48,13 @@ Status Shoot::onUpdateKick(const StpInfo &info) noexcept {
     // forward the generated command to the ControlModule, for checking and limiting
     forwardRobotCommand(info.getCurrentWorld());
 
-    if (info.getBall()->get()->getVelocity().length() > stp::control_constants::HAS_KICKED_ERROR_MARGIN) {
-        shootAttempts = 0;
-        return Status::Success;
+    if (info.getRobot()){
+        if (!info.getRobot()->hasBall()) {
+            shootAttempts = 0;
+            return Status::Success;
+        }
     }
+
     ++shootAttempts;
     return Status::Running;
 }

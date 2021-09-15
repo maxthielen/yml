@@ -105,6 +105,9 @@ namespace rtt::ai::stp::play {
         stpInfos["keeper"].setPositionToMoveTo(field.getOurGoalCenter());
 
         /// Passer and receivers
+        stpInfos["passer"].setPositionToMoveTo(PositionComputations::getPosition(stpInfos["passer"].getPositionToMoveTo(),
+                                                                                 gen::gridRightMid, gen::GoalShootPosition, field, world));
+
         // calculate all info necessary to execute a pass
         calculateInfoForPass(ball);
 
@@ -151,44 +154,49 @@ namespace rtt::ai::stp::play {
 
 // TODO: This function should be split, the passing for this play and the receiving in another play
     void AttackingPass::calculateInfoForPass(const world::ball::Ball *ball) noexcept {
-        /// Recalculate pass positions if we did not shoot yet
+        /// Recalculate pass positions
         /// For the receive locations, divide the field up into grids where the passers should stand,
         /// and find the best locations in those grids
 
-
+        /// Ball is kicked if it is moving and not held by either of the receivers
         bool ballKicked = (ball->getVelocity().length() > control_constants::HAS_KICKED_ERROR_MARGIN) ||
                 ((stpInfos["receiver_left"].getRobot() && stpInfos["receiver_left"].getRobot()->get()->getDistanceToBall() < control_constants::HAS_BALL_DISTANCE_ERROR_MARGIN) ||
                 (stpInfos["receiver_right"].getRobot() && stpInfos["receiver_right"].getRobot()->get()->getDistanceToBall() < control_constants::HAS_BALL_DISTANCE_ERROR_MARGIN));
 
-        if (ballKicked){
-            RTT_DEBUG("ball kicked");
-        }
-        else{
-            RTT_DEBUG("ball not kicked");
-        }
-        Vector2 passLocation;
-        Vector2 passerLocation;
-
-        bool receivingLeft;
+        Vector2 passLocation; //Location that the pass will go to. I.e. the point where receiver and ball (should) meet.
+        bool receivingLeft; //To track whether the left or right receiver will actually receive the pass
 
         if (!ballKicked) {
-            auto receiverPositionRight = PositionComputations::getPosition(
-                    stpInfos["receiver_right"].getPositionToMoveTo(), gen::gridRightBot, gen::GoalShootPosition, field,
-                    world);
+            // Calculate best positions for receivers in the rightBot and rightTop grids
             auto receiverPositionLeft = PositionComputations::getPosition(
                     stpInfos["receiver_left"].getPositionToMoveTo(), gen::gridRightTop, gen::GoalShootPosition, field,
                     world);
+            auto receiverPositionRight = PositionComputations::getPosition(
+                    stpInfos["receiver_right"].getPositionToMoveTo(), gen::gridRightBot, gen::GoalShootPosition, field,
+                    world);
 
-            passerLocation = ball->getPos();
             stpInfos["passer"].setShotType(ShotType::PASS);
 
-            // Receiver
             stpInfos["receiver_left"].setPositionToMoveTo(receiverPositionLeft.position);
             stpInfos["receiver_right"].setPositionToMoveTo(receiverPositionRight.position);
 
-            std::vector<gen::ScoredPosition> positions = {receiverPositionLeft, receiverPositionRight};
-            passLocation = computations::PassComputations::determineBestPosForPass(positions);
+            if (stpInfos["receiver_right"].getRobot() && stpInfos["receiver_right"].getRobot()){
+                auto leftPassLocation = calculatePassLocation(stpInfos["receiver_left"].getRobot()->get()->getPos(), ball->getPos(), receiverPositionLeft.position);
+                auto rightPassLocation = calculatePassLocation(stpInfos["receiver_right"].getRobot()->get()->getPos(), ball->getPos(), receiverPositionRight.position);
 
+                auto gridLeft = Grid(stpInfos["receiver_left"].getRobot()->get()->getPos().x, stpInfos["receiver_left"].getRobot()->get()->getPos().y, 1*1.0, 1*1, 3, 3);
+                auto bestLeftPassLocation = PositionComputations::getPosition(leftPassLocation, gridLeft, gen::GoalShootPosition, field, world);
+
+                auto gridRight = Grid(stpInfos["receiver_right"].getRobot()->get()->getPos().x, stpInfos["receiver_right"].getRobot()->get()->getPos().y, 1*1.0, 1*1, 3, 3);
+                auto bestRightPassLocation = PositionComputations::getPosition(rightPassLocation, gridRight, gen::GoalShootPosition, field, world);
+
+                std::vector<gen::ScoredPosition> positions = {bestLeftPassLocation, bestRightPassLocation};
+                passLocation = computations::PassComputations::determineBestPosForPass(positions);
+            }
+            else {
+                std::vector<gen::ScoredPosition> positions = {receiverPositionLeft, receiverPositionRight};
+                passLocation = computations::PassComputations::determineBestPosForPass(positions);
+            }
             /// If no good pass found, pass to closest robot
             if (passLocation == Vector2{0, 0}) {
                 passLocation = world->getWorld()->getRobotClosestToPoint(
@@ -197,26 +205,18 @@ namespace rtt::ai::stp::play {
             }
 
             /// Receiver should intercept when constraints are met
-            auto rightDis = receiverPositionRight.position - passLocation;
-            auto leftDis = receiverPositionLeft.position - passLocation;
-
-            if (rightDis.length() < leftDis.length()) {
-                receivingLeft = false;
-            } else {
-                receivingLeft = true;
+            double leftDis;
+            double rightDis;
+            if (stpInfos["receiver_left"].getRobot() && stpInfos["receiver_right"].getRobot()) {
+                leftDis = (stpInfos["receiver_left"].getRobot()->get()->getPos() - passLocation).length2();
+                rightDis = (stpInfos["receiver_right"].getRobot()->get()->getPos() - passLocation).length2();
+            }
+            else {
+                leftDis = (receiverPositionLeft.position - passLocation).length2();
+                rightDis = (receiverPositionRight.position - passLocation).length2();
             }
 
-            if (receivingLeft) {
-                if (stpInfos["receiver_left"].getRobot()) {
-                    auto currentRobotPosition = stpInfos["receiver_left"].getRobot()->get()->getPos();
-                    passLocation = calculatePassLocation(currentRobotPosition, ball->getPos(), passLocation);
-                }
-            } else {
-                if (stpInfos["receiver_right"].getRobot()) {
-                    auto currentRobotPosition = stpInfos["receiver_right"].getRobot()->get()->getPos();
-                    passLocation = calculatePassLocation(currentRobotPosition, ball->getPos(), passLocation);
-                }
-            }
+            receivingLeft = leftDis < rightDis;
 
             // decide kick or chip
             auto passLine = Tube(ball->getPos(), passLocation, control_constants::ROBOT_CLOSE_TO_POINT / 2);
@@ -237,39 +237,42 @@ namespace rtt::ai::stp::play {
                 stpInfos["passer"].setKickOrChip(KickOrChip::KICK);
             }
         }
-        RTT_DEBUG("Pass Location before calc = ");
-        RTT_DEBUG(passLocation);
 
         if (ballKicked) {
-            auto returnPos = PositionComputations::getPosition(
-                    stpInfos["passer"].getPositionToMoveTo(), gen::gridRightMid, gen::OffensivePosition, field,
-                    world);
-            passerLocation = (Vector2(0,0));
-            RTT_DEBUG("BALL VELOCITY = ");
-            RTT_DEBUG(ball->getFilteredVelocity());
+            auto leftDis = (Line(ball->getPos(), ball->getPos() + ball->getFilteredVelocity()).project(
+                    stpInfos["receiver_left"].getPositionToMoveTo().value()) - stpInfos["receiver_left"].getPositionToMoveTo().value()).length2();
+            auto rightDis = (Line(ball->getPos(), ball->getPos() + ball->getFilteredVelocity()).project(
+                    stpInfos["receiver_right"].getPositionToMoveTo().value()) - stpInfos["receiver_right"].getPositionToMoveTo().value()).length2();
+
+            receivingLeft = leftDis < rightDis;
+
             if (receivingLeft){
                 passLocation = stpInfos["receiver_left"].getPositionToMoveTo().value();
+                RTT_DEBUG("Pass location before  using ball: ", passLocation);
                 passLocation = (Line(ball->getPos(), ball->getPos() + ball->getFilteredVelocity()).project(
                         passLocation));
+                RTT_DEBUG("Pass location after using ball: ", passLocation);
             }
             else{
                 passLocation = stpInfos["receiver_right"].getPositionToMoveTo().value();
+                RTT_DEBUG("Pass location before  using ball: ", passLocation);
                 passLocation = Line(ball->getPos(), ball->getPos() + ball->getFilteredVelocity()).project(
                         passLocation);
+                RTT_DEBUG("Pass location after using ball: ", passLocation);
             }
-            RTT_DEBUG("Pass Location after calc = ");
-            RTT_DEBUG(passLocation);
         }
+        RTT_DEBUG(ballKicked ? "Kicked" : "Not Kicked");
+        RTT_DEBUG("Pass location", passLocation);
+        RTT_DEBUG("Receiving ", receivingLeft ? "left" : "right");
+        RTT_DEBUG("Left going to: ", stpInfos["receiver_left"].getPositionToMoveTo().value());
+        RTT_DEBUG("Right going to: ", stpInfos["receiver_right"].getPositionToMoveTo().value());
 
-        if (receivingLeft){
+        if (receivingLeft) {
             stpInfos["receiver_left"].setPositionToMoveTo(passLocation);
         }
-        else{
+        else {
             stpInfos["receiver_right"].setPositionToMoveTo(passLocation);
         }
-
-        // Passer
-        stpInfos["passer"].setPositionToMoveTo(passerLocation);
         stpInfos["passer"].setPositionToShootAt(passLocation);
     }
 
@@ -322,15 +325,12 @@ namespace rtt::ai::stp::play {
     bool AttackingPass::passFinished() noexcept {
         // TODO: improve this condition
         // Pass is done when one of the receivers is really close to the ball
-        RTT_DEBUG("Checking if finished...")
         if ((stpInfos["receiver_left"].getRobot() &&
                 stpInfos["receiver_left"].getRobot()->get()->getDistanceToBall() < 0.08) ||
                (stpInfos["receiver_right"].getRobot() &&
                 stpInfos["receiver_right"].getRobot()->get()->getDistanceToBall() < 0.08)){
-            RTT_DEBUG("PASS FINISHED");
             return true;
         }
-        RTT_DEBUG("PASS NOT FINISHED");
         return false;
     }
 
