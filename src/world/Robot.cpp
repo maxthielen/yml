@@ -31,6 +31,11 @@ Robot::Robot(std::unordered_map<uint8_t, proto::RobotFeedback> &feedback, const 
     if (ball.has_value()) {
         setDistanceToBall(pos.dist((*ball)->getPos()));
         auto angleRobotToBall = ((*ball)->getPos() - pos).angle();
+        if (id == 3 && team == us){
+            RTT_DEBUG("Angle of robot: ", angle);
+            RTT_DEBUG("Angle of robot to ball: ", angleRobotToBall);
+            RTT_DEBUG("Angle diff: ", angle.shortestAngleDiff(Angle(angleRobotToBall)))
+        }
         setAngleDiffToBall(angle.shortestAngleDiff(Angle(angleRobotToBall)));
     }
 }

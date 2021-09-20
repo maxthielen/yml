@@ -5,6 +5,7 @@
 #include "stp/skills/Rotate.h"
 
 #include "control/ControlUtils.h"
+#include <roboteam_utils/Print.h>
 
 namespace rtt::ai::stp::skill {
 
@@ -30,8 +31,14 @@ Status Rotate::onUpdate(const StpInfo &info) noexcept {
     // Check if successful
     double errorMargin = stp::control_constants::GO_TO_POS_ANGLE_ERROR_MARGIN * M_PI;
     if (info.getRobot().value()->getAngle().shortestAngleDiff(targetAngle) < errorMargin) {
+        if (info.getRobot()->get()->getId() == 3){
+            RTT_DEBUG("Rotated");
+        }
         return Status::Success;
     } else {
+        if (info.getRobot()->get()->getId() == 3){
+            RTT_DEBUG("Rotating");
+        }
         return Status::Running;
     }
 }

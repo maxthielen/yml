@@ -31,6 +31,10 @@ RobotView::operator bool() const noexcept { return get() != nullptr; }
 bool RobotView::hasBallAccordingToVision(double maxDist, double maxAngle) const noexcept {
     auto dist = get()->getDistanceToBall();
     auto angle = get()->getAngleDiffToBall();
+    if (get()->getId() == 3){
+        RTT_DEBUG("Distance: ", dist, " Max: ", maxDist);
+        RTT_DEBUG("Angle: ", angle, " Max: ", maxAngle * M_PI);
+    }
     return dist < maxDist && angle < maxAngle * M_PI;
 }
 

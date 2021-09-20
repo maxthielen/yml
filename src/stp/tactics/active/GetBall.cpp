@@ -44,7 +44,7 @@ std::optional<StpInfo> GetBall::calculateInfoForSkill(StpInfo const &info) noexc
 
 bool GetBall::isTacticFailing(const StpInfo &info) noexcept { return false; }
 
-bool GetBall::shouldTacticReset(const StpInfo &info) noexcept { return !info.getRobot()->hasBall(); }
+bool GetBall::shouldTacticReset(const StpInfo &info) noexcept { return false;}//!info.getRobot()->hasBall(); }
 
 bool GetBall::isEndTactic() noexcept {
     // This is not an end tactic

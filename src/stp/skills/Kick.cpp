@@ -3,10 +3,12 @@
 //
 
 #include "stp/skills/Kick.h"
+#include <roboteam_utils/Print.h>
 
 namespace rtt::ai::stp::skill {
 
 Status Kick::onUpdate(const StpInfo &info) noexcept {
+    RTT_DEBUG("Kicking");
     // Clamp and set kick velocity
     float kickVelocity = std::clamp(info.getKickChipVelocity(), 0.0, stp::control_constants::MAX_KICK_POWER);
 
@@ -35,10 +37,12 @@ Status Kick::onUpdate(const StpInfo &info) noexcept {
     // forward the generated command to the ControlModule, for checking and limiting
     forwardRobotCommand(info.getCurrentWorld());
 
-    if (info.getBall()->get()->getVelocity().length() > stp::control_constants::HAS_KICKED_ERROR_MARGIN) {
+    if (!info.getRobot()->hasBall()) {
         kickAttempts = 0;
+        RTT_DEBUG("Kicked ball");
         return Status::Success;
     }
+    RTT_DEBUG("Not kicked");
     ++kickAttempts;
     return Status::Running;
 }
