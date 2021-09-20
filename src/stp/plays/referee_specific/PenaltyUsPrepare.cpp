@@ -3,6 +3,9 @@
 //
 
 #include "stp/plays/referee_specific/PenaltyUsPrepare.h"
+
+#include <stp/roles/passive/BallAvoider.h>
+
 #include "stp/roles/passive/Formation.h"
 
 namespace rtt::ai::stp::play {
@@ -16,7 +19,7 @@ namespace rtt::ai::stp::play {
 
         roles = std::array<std::unique_ptr<Role>, rtt::ai::Constants::ROBOT_COUNT()>{
                 std::make_unique<role::Formation>(role::Formation("keeper")),
-                std::make_unique<role::Formation>(role::Formation("kicker_formation")),
+                std::make_unique<role::BallAvoider>(role::BallAvoider("kicker_formation")),
                 std::make_unique<role::Formation>(role::Formation("formation_0")),
                 std::make_unique<role::Formation>(role::Formation("formation_1")),
                 std::make_unique<role::Formation>(role::Formation("formation_2")),
