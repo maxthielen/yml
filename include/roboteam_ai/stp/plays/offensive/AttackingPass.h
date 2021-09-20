@@ -87,6 +87,12 @@ class AttackingPass : public Play {
     bool passerShot{false};
 
     void storePlayInfo(gen::PlayInfos& info) noexcept override;
+
+    Vector2 calculatePassLocation(Vector2 currentRobotPosition, Vector2 ballPosition, Vector2 passLocation);
+
+    float calculateBallTravelTime(Vector2 ballPosition, Vector2 passLocation);
+
+    float calculateTravelTime(Vector2 currentPosition, Vector2 passLocation);
 };
 }  // namespace rtt::ai::stp::play
 
