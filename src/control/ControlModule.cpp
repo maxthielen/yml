@@ -21,7 +21,7 @@ namespace rtt::ai::control {
 
     void ControlModule::limitRobotCommand(proto::RobotCommand& command,std::optional<rtt::world::view::RobotView> robot) {
         limitVel(command,robot);
-//        limitAngularVel(command,robot);
+        limitAngularVel(command,robot);
     }
 
     void ControlModule::limitVel(proto::RobotCommand& command,std::optional<rtt::world::view::RobotView> robot) {
@@ -51,6 +51,9 @@ namespace rtt::ai::control {
             auto targetAngle = command.w();
             auto robotAngle = robot.value()->getAngle();
 
+            if (!SETTINGS.isLeft()) {
+                robotAngle+=M_PI;
+            }
             // If the angle error is larger than the desired angle rate, the angle command is adjusted
             if (robotAngle.shortestAngleDiff(targetAngle) > stp::control_constants::ANGLE_RATE) {
                 // Direction of rotation is the shortest distance
