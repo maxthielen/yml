@@ -41,12 +41,12 @@ constexpr double ENEMY_CLOSE_TO_BALL_DISTANCE = 1.0;
 constexpr double MAX_VEL_CMD = 8;
 constexpr double MAX_DRIBBLER_CMD = 31;
 // Angle increment per tick
-constexpr double ANGLE_RATE = 0.1 * M_PI;
+constexpr double ANGLE_RATE = 0.075 * M_PI;
 constexpr double MAX_VEL_WHEN_HAS_BALL = 3.0;
 
 /// HasBall margins
 // Angle margin robot to ball. Within this margin, the robot has the ball
-constexpr double HAS_BALL_ANGLE_ERROR_MARGIN = 0.10;
+constexpr double HAS_BALL_ANGLE_ERROR_MARGIN = 0.12;
 // Distance margin robot to ball. Within this margin, the robot has the ball
 /// WHEN IN GRSIM, CHANGE HAS_BALL_DISTANCE_ERROR_MARGIN TO 0.12
 /// WHEN IRL, CHANGE HAS_BALL_DISTANCE_ERROR_MARGIN TO 0.10
