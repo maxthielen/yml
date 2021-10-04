@@ -31,15 +31,13 @@ std::optional<StpInfo> GetBall::calculateInfoForSkill(StpInfo const &info) noexc
 
     if (skillStpInfo.getRobot()->get()->getAngle().shortestAngleDiff((ballPosition - robotPosition).angle()) > control_constants::HAS_BALL_ANGLE_ERROR_MARGIN/2
         && ballDistance < control_constants::AVOID_BALL_DISTANCE){
-        // don't move too close to the ball until the angle to the ball is correct
+        // don't move too close to the ball until the angle to the ball is (roughly) correct
         skillStpInfo.setPositionToMoveTo(skillStpInfo.getRobot()->get()->getPos());
-    }
-    else{
+    } else {
         // the robot will go to the position of the ball
         Vector2 newRobotPosition = robotPosition + (ballPosition - robotPosition).stretchToLength(ballDistance - control_constants::CENTER_TO_FRONT + 0.035);
         skillStpInfo.setPositionToMoveTo(newRobotPosition);
     }
-
 
     skillStpInfo.setAngle((ballPosition - robotPosition).angle());
 
