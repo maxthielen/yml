@@ -1,6 +1,6 @@
 name: Documentation
 
-on: [push]  # Triggers on push
+on: [pull]  # Triggers on push
 
 jobs:
   build:
