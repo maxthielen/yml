@@ -1,0 +1,15 @@
+name: Documentation
+
+on: [push]  # Triggers on push
+
+jobs:
+  build:
+    runs-on: linux
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Doxygen html
+        with:
+          doxyfile-path: "./doxygen"
+          working-directory: "."
+          publish_dir: ../doxygen_documentation/html  # open index.html to view documentation
