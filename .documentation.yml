@@ -12,4 +12,4 @@ jobs:
         with:
           doxyfile-path: "./doxygen"
           working-directory: "."
-          publish_dir: ../doxygen_documentation/html  # open index.html to view documentation
+          publish_dir: ./doxygen_documentation/html  # open index.html to view documentation
