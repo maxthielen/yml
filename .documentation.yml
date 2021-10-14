@@ -1,4 +1,4 @@
-name: Documentation
+name: 'Documentation'
 
 on: [pull]  # Triggers on push
 
@@ -8,8 +8,14 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Doxygen html
+      - name: 'Doxygen html'
+        uses: mattnotmitt/doxygen-action@v1.1.0  # pre-build doxygen-action
         with:
           doxyfile-path: "./doxygen"
           working-directory: "."
-          publish_dir: ./doxygen_documentation/html  # open index.html to view documentation
+
+        - name: 'Deploy'
+            uses: peaceiris/actions-gh-pages@v3
+            with:
+              github_token: ${{ secrets.GITHUB_TOKEN }}
+              publish_dir: ./doxygen_documentation/html
