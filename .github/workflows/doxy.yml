@@ -1,0 +1,32 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Doxygen Documentation
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the development branch
+  push:
+    branches: [ development ]
+  pull_request:
+    branches: [ development ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+  
+jobs:
+  build:
+    runs-on: linux
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: 'Doxygen html'
+        uses: mattnotmitt/doxygen-action@v1.1.0  # pre-build doxygen-action
+        with:
+          doxyfile-path: "./doxygen"
+          working-directory: "."
+
+      - name: 'Deploy'
+        uses: peaceiris/actions-gh-pages@v3  # pre-build deployment-action
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./doxygen_documentation/html
