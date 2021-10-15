@@ -27,7 +27,7 @@ jobs:
 
       - name: 'Deploy'
         uses: peaceiris/actions-gh-pages@v3.8.0  # pre-build deployment-action
-        with:doxygen documentation
+        with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: development
           publish_dir: "./doxygen"
