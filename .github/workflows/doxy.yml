@@ -22,7 +22,7 @@ jobs:
       - name: 'Build doxyfile'
         uses: mattnotmitt/doxygen-action@v1.3.1  # action to build config documentation from the specified config config file
         with:
-          working-directory: "."
+          working-directory: "../doxygen"
           doxyfile-path: "doxygen/config"
 
       - name: 'Deploy'
