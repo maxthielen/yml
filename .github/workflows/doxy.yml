@@ -21,19 +21,20 @@ jobs:
         with:
           working-directory: "."
           doxyfile-path: "doxygen"
+          enable-latex: true
 
-      - name: 'Setup Flutter'
-        run: |
-          git clone https://github.com/flutter/flutter.git --depth 1 -b beta _flutter
-          echo "${GITHUB_WORKSPACE}/_flutter/bin" >> ${GITHUB_PATH}
-
-      - name: 'Install Flutter'
-        run: |
-          flutter config --enable-web
-          flutter pub get
-
-      - name: 'Build Flutter'
-        run: flutter build web
+#      - name: 'Setup Flutter'
+#        run: |
+#          git clone https://github.com/flutter/flutter.git --depth 1 -b beta _flutter
+#          echo "${GITHUB_WORKSPACE}/_flutter/bin" >> ${GITHUB_PATH}
+#
+#      - name: 'Install Flutter'
+#        run: |
+#          flutter config --enable-web
+#          flutter pub get
+#
+#      - name: 'Build Flutter'
+#        run: flutter build web
 
       - name: 'Deploy'
         uses: peaceiris/actions-gh-pages@v3.8.0  # action to deploy the documentation in a separate branch
