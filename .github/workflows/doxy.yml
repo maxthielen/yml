@@ -31,4 +31,4 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: development
           publish_dir: "./doxygen"
-          commit_message: &{{ github.event.head_commit.message }}
+          commit_message: ${{ github.event.head_commit.message }}
