@@ -1,6 +1,8 @@
 name: 'Documentation'
 
-on: [pull]  # Triggers on push
+on:
+  pull_request:
+    branches: [development]  # Triggers on pull-request
 
 jobs:
   build:
@@ -15,7 +17,7 @@ jobs:
           working-directory: "."
 
         - name: 'Deploy'
-            uses: peaceiris/actions-gh-pages@v3
+            uses: peaceiris/actions-gh-pages@v3  # pre-build deployment-action
             with:
               github_token: ${{ secrets.GITHUB_TOKEN }}
               publish_dir: ./doxygen_documentation/html
