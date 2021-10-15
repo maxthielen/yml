@@ -1,6 +1,8 @@
 name: 'Documentation'
 
-on: [pull]  # Triggers on pull
+on:
+  pull_request:
+    branches: [development]  # Triggers on pull-request
 
 jobs:
   build:
